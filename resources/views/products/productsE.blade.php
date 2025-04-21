@@ -17,7 +17,7 @@
             <form action="{{ route('productE') }}" method="POST" autocomplete="off">
                 @csrf
                 <input type="hidden" name="id_product">
-                <div class="row mb-4">
+                <div class="row mb-2">
                     <div class="col-md-6">
                         <label for="nombre">Nombre del producto:</label>
                         <input class="form-control" type="text" name="name_prod_e" id="name_prod_e" required>
@@ -27,17 +27,26 @@
                         <input class="form-control" type="text" name="slug_product_e" id="slug_product_e" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="descripcion">Precio de compra:</label>
-                        <input class="form-control" type="number" name="price_product_e" id="price_product_e" min="0" required>
+                        <label for="descripcion">Precio de venta (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_sale_e" id="price_product_sale_e" min="0" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="descripcion">Estado:</label>
-                        <select class="form-control" name="state_product_e" id="state_product_e">
-                            <option value="0">Inactivo</option>
-                            <option value="1" selected>Activo</option>
-                        </select>
+                        <label for="descripcion">Precio de compra (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_purch_e" id="price_product_purch_e" min="0" required>
                     </div>
                 </div>
+                <div class="row mb-4 justify-content-center text-center">
+                    <div class="col-auto">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <label class="form-check-label mb-0" for="state_product_e">Inactivo</label>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="state_product_e" name="state_product_e" value="1">
+                            </div>
+                            <label class="form-check-label mb-0" for="state_product_e">Activo</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row justify-content-center">
                     <div class="col-6">
                         <button class="btn btn-success w-100" type="submit">Editar Producto</button>

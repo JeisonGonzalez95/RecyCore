@@ -124,12 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mostrar el formulario correspondiente
         document.getElementById(formularioId).style.display = 'block';
 
-        // Buscar qué tipo de datos viene (menuId, itemId, prodId)
         for (const type of dataTypes) {
             if (btn.dataset[type]) {
                 const data = JSON.parse(btn.dataset[type]);
 
-                // Llenar campos automáticamente según el tipo
                 const fillMap = {
                     menuId: {
                         'menu_id': 'id',
@@ -146,7 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         'id_product': 'id',
                         'name_prod_e': 'name',
                         'slug_product_e': 'slug',
-                        'price_product_e': 'price',
+                        'price_product_sale_e': 'price_sale',
+                        'price_product_purch_e': 'price_purch',
                         'state_product_e': 'state'
                     },
                     userId: {
@@ -156,15 +155,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 const fields = fillMap[type];
-                for (const [fieldId, dataKey] of Object.entries(fields)) {
-                    const field = document.getElementById(fieldId);
-                    if (field) field.value = data[dataKey] ?? '';
+                for (const [fieldName, dataKey] of Object.entries(fields)) {
+                    const field = document.querySelector(`[name="${fieldName}"]`);
+                    if (field) {
+                        if (fieldName === 'state_product_e') {
+                            field.checked = data[dataKey] == 1;
+                        } else {
+                            field.value = data[dataKey] ?? '';
+                        }
+                    }
                 }
 
-                break; // Ya encontró y llenó uno, no sigue buscando
+                break;
             }
         }
     };
+
 
 
     function ajustarSidebarTop() {
@@ -184,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    
+
 
 
 
