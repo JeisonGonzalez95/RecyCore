@@ -1,0 +1,276 @@
+body {
+    display: auto;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background: white;
+}
+
+.footer {
+    text-align: right;
+    color: rgb(22, 13, 73);
+    text-shadow: 1px 1px 1px white;
+    position: fixed;
+    bottom: 0;
+    width: 97%;
+    opacity: 40%;
+}
+
+
+.bg-glass {
+    background-color: hsla(0, 0%, 100%, 0.9) !important;
+    backdrop-filter: saturate(200%) blur(25px);
+}
+
+.welcome {
+    z-index: 10;
+}
+
+.titulo {
+    color: hsl(218, 81%, 95%);
+}
+
+.parrafo {
+    color: hsl(218, 81%, 85%);
+    opacity: 70%;
+}
+
+.txt-smll {
+    font-size: 12px;
+    margin-right: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.img-logo {
+    width: 50px;
+}
+
+.img-logo-u {
+    width: 100px;
+}
+
+.img-logo-s {
+    width: 200px;
+}
+
+
+
+/* Estilos para el menú lateral */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    background: #142434;
+    padding-top: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar .menu-item {
+    display: block;
+    padding: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+
+.sidebar .menu-item:hover {
+    background: #2c4464;
+}
+
+.sidebar .menu-item.active {
+    background: #2c4464;
+    color: #ffffff;
+    font-weight: bold;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-left: 20px;
+    box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-section.hidden {
+    display: none;
+}
+
+
+.menu-toggle {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #6d0ca4;
+    border: none;
+    color: #ffffff;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-toggle:hover {
+    background: #2c4464;
+    color: #fff;
+}
+
+.menu-item.dropdown::after {
+    content: " ▼";
+    font-size: 14px;
+}
+
+.content-wrapper {
+    padding: 20px;
+    margin-top: 10%;
+    margin-left: 10%;
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    width: calc(100% - 25px) !important;
+}
+
+
+
+.resizable-content {
+    transition: width 0.3s ease-in-out;
+    width: 100% !important;
+}
+
+.navbar {
+    position: fixed !important;
+    padding-top: 0.01rem !important;
+    padding-bottom: 0.01rem !important;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+    background: #ffffff !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Procesos para gestion de inventarios */
+
+
+body.no-animate .menu-superior a,
+body.no-animate .menu-superior a::after {
+    transition: none !important;
+}
+
+.menu-superior {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    width: fit-content;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-superior a {
+    text-decoration: none;
+    padding: 12px 20px;
+    color: #1f2937;
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+.menu-superior a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    width: 100%;
+    height: 2px;
+    background: #3b82f6;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+}
+
+.menu-superior a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.menu-superior a:hover {
+    color: #3b82f6;
+}
+
+.menu-superior a.active {
+    color: #3b82f6;
+}
+
+.menu-superior a.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+#fac,
+#inv,
+#sis {
+    display: none;
+}
+
+
+
+[popover] {
+    position: fixed;
+    inset: 0;
+    /* top: 0; right: 0; bottom: 0; left: 0 */
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* fondo opaco */
+    z-index: 1055;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Cuando se abre el popover */
+[popover]:popover-open {
+    display: flex;
+    animation: fadeIn 0.1s ease-in-out;
+}
+
+/* Contenido del modal */
+[popover] .modal-content {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    width: 100%;
+    animation: slideUp 0.3s ease-in-out;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

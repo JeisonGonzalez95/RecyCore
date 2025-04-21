@@ -1,0 +1,170 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\mainMenus;
+use App\Models\menuItems;
+use Illuminate\Http\Request;
+
+class menusController extends Controller
+{
+    public function mainMenus()
+    {
+        // Trae todos los menús activos con sus ítems activos
+        $menus = mainMenus::with(['items' => function ($query) {
+            $query->where('state', 1);
+        }])
+            ->where('state', 1)
+            ->get();
+
+        return view('source.index', compact('menus'));
+    }
+
+    public function menusItemsList()
+    {
+
+        $menusL = mainMenus::all();
+        $itemsL = menuItems::all();
+
+        return view('menus.menusL', compact('menusL', 'itemsL'));
+    }
+
+    public function createMenu(Request $request)
+    {
+        $request->validate([
+            'name_menu' => 'required',
+            'slug_menu' => 'required|unique:main_menus,slug_menu',
+            'state_menu' => 'required'
+        ]);
+
+        mainMenus::create([
+            'name_menu' => $request->name_menu,
+            'slug_menu' => $request->slug_menu,
+            'state' => $request->state_menu
+        ]);
+
+        return redirect()->route('menusList')->with('alerta', [
+            'titulo' => '¡Éxito!',
+            'mensaje' => 'Menú Creado correctamente.',
+            'icono' => 'success',
+            'confirmarTexto' => 'Entendido',
+            'mostrarCancelar' => false
+        ]);
+    }
+
+    public function createItem(Request $request)
+    {
+
+        $request->validate([
+            'name_item' => 'required',
+            'route' => 'required',
+            'main_menu' => 'required',
+            'state' => 'required'
+        ]);
+
+        menuItems::create([
+            'name_item' => $request->name_item,
+            'route_item' => $request->route,
+            'main_menu_id' => $request->main_menu,
+            'state' => $request->state
+        ]);
+
+        return redirect()->route('menusList')->with('alerta', [
+            'titulo' => '¡Éxito!',
+            'mensaje' => 'Item Creado correctamente.',
+            'icono' => 'success',
+            'confirmarTexto' => 'Entendido',
+            'mostrarCancelar' => false
+        ]);
+    }
+
+    public function editMenu(Request $request)
+    {
+
+        $request->validate([
+            'name_menu_e' => 'required',
+            'slug_menu_e' => 'required|min:2|unique:main_menus,slug_menu,' . $request->menu_id
+        ]);
+
+        $menus = mainMenus::findOrFail($request->menu_id);
+
+        $menus->update([
+            'name_menu' => $request->name_menu_e,
+            'slug_menu' => $request->slug_menu_e,
+            'updated_at' => now()
+        ]);
+
+        return redirect()->route('menusList')->with('alerta', [
+            'titulo' => '¡Éxito!',
+            'mensaje' => 'Menú Modificado correctamente.',
+            'icono' => 'success',
+            'confirmarTexto' => 'Entendido',
+            'mostrarCancelar' => false
+        ]);
+    }
+
+    public function editItem(Request $request)
+    {
+
+        $request->validate([
+            'name_item_e' => 'required',
+            'route_e' => 'required',
+            'main_menu_e' => 'required'
+        ]);
+
+        $items = menuItems::findOrFail($request->item_id);
+
+        $items->update([
+            'name_item' => $request->name_item_e,
+            'route_item' => $request->route_e,
+            'main_menu_id' => $request->main_menu_e,
+            'updated_at' => now()
+        ]);
+
+        return redirect()->route('menusList')->with('alerta', [
+            'titulo' => '¡Éxito!',
+            'mensaje' => 'Item Modificado correctamente.',
+            'icono' => 'success',
+            'confirmarTexto' => 'Entendido',
+            'mostrarCancelar' => false
+        ]);
+    }
+
+    public function deleteMai($id, $moi)
+    {
+        if ($moi == 1) {
+            $menu = mainMenus::findOrFail($id);
+
+            $newState = $menu->state == 1 ? 0 : 1;
+
+            $menu->update([
+                'state' => $newState,
+                'updated_at' => now()
+            ]);
+
+            $table = 'Menú';
+            $accion = $newState == 1 ? 'Activado' : 'Desactivado';
+            
+        } elseif ($moi == 2) {
+            $item = menuItems::findOrFail($id);
+            
+            $newState = $item->state == 1 ? 0 : 1;
+            
+            $item->update([
+                'state' => $newState,
+                'updated_at' => now()
+            ]);
+            
+            $table = 'Item';
+            $accion = $newState == 1 ? 'Activado' : 'Desactivado';
+        }
+
+        return redirect()->route('menusList')->with('alerta', [
+            'titulo' => '¡Éxito!',
+            'mensaje' => "$table $accion correctamente.",
+            'icono' => 'success',
+            'confirmarTexto' => 'Entendido',
+            'mostrarCancelar' => false
+        ]);
+    }
+}
