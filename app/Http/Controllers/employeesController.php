@@ -125,15 +125,23 @@ class employeesController extends Controller
 
     public function deleteEmployee($id)
     {
-
-        $employee = Employee::find($id);
+        $employee = Employee::findOrFail($id); // Mejor usar findOrFail para lanzar 404 si no existe
 
         $newState = $employee->state == 1 ? 0 : 1;
 
+        // Actualiza el estado del empleado
         $employee->update([
             'state' => $newState,
             'updated_at' => now()
         ]);
+
+        // Actualiza el estado del usuario asociado (si existe)
+        if ($employee->userApp) {
+            $employee->userApp->update([
+                'state' => $newState,
+                'updated_at' => now()
+            ]);
+        }
 
         $accion = $newState == 1 ? 'Activado' : 'Desactivado';
 
@@ -146,6 +154,7 @@ class employeesController extends Controller
         ]);
     }
 
+
     public function editUser(Request $request)
     {
         $request->validate([
@@ -155,7 +164,7 @@ class employeesController extends Controller
         $user = users_app::findOrFail($request->user_id);
 
         $user->update([
-            'password' => $request->pass_er,
+            'password' => bcrypt($request->pass_er),
             'updated_at' => now()
         ]);
 
