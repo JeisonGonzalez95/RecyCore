@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\employeesController;
+use App\Http\Controllers\invetaryController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\menusController;
 use App\Http\Controllers\positionController;
@@ -48,10 +49,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/editMn', [menusController::class, 'editMenu'])->name('edit_mn');
     Route::post('/editIt', [menusController::class, 'editItem'])->name('edit_it');
     Route::get('/deleteMaI/{id}/{mai}', [menusController::class, 'deleteMai'])->name('delete_mai');
-
-    // Inventario
-    Route::get('inventaryI', function () { return view('inventary.inventaryIn'); })->name('inventaryI');
-    Route::get('inventaryO', function () { return view('inventary.inventaryOut'); })->name('inventaryO');
+    
+    // Inventarios
+    Route::get('/inventaryI', [invetaryController::class, 'inventaryInList'])->name('inventaryI');
+    Route::get('/inventaryO', [invetaryController::class, 'inventaryOutList'])->name('inventaryO');
 
     // Productos
     Route::get('/productList', [productsController::class, 'productsList'])->name('productList');
