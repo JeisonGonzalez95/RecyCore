@@ -134,14 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Mostrar el formulario correspondiente
     document.getElementById(formularioId).style.display = 'block';
-
-    // Buscar qué tipo de datos viene (menuId, itemId, prodId)
     for (var _i = 0, _dataTypes = dataTypes; _i < _dataTypes.length; _i++) {
       var type = _dataTypes[_i];
       if (btn.dataset[type]) {
         var data = JSON.parse(btn.dataset[type]);
-
-        // Llenar campos automáticamente según el tipo
         var fillMap = {
           menuId: {
             'menu_id': 'id',
@@ -158,7 +154,8 @@ document.addEventListener('DOMContentLoaded', function () {
             'id_product': 'id',
             'name_prod_e': 'name',
             'slug_product_e': 'slug',
-            'price_product_e': 'price',
+            'price_product_sale_e': 'price_sale',
+            'price_product_purch_e': 'price_purch',
             'state_product_e': 'state'
           },
           userId: {
@@ -168,14 +165,20 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         var fields = fillMap[type];
         for (var _i2 = 0, _Object$entries = Object.entries(fields); _i2 < _Object$entries.length; _i2++) {
-          var _data$dataKey;
           var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
-            fieldId = _Object$entries$_i[0],
+            fieldName = _Object$entries$_i[0],
             dataKey = _Object$entries$_i[1];
-          var field = document.getElementById(fieldId);
-          if (field) field.value = (_data$dataKey = data[dataKey]) !== null && _data$dataKey !== void 0 ? _data$dataKey : '';
+          var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
+          if (field) {
+            if (fieldName === 'state_product_e') {
+              field.checked = data[dataKey] == 1;
+            } else {
+              var _data$dataKey;
+              field.value = (_data$dataKey = data[dataKey]) !== null && _data$dataKey !== void 0 ? _data$dataKey : '';
+            }
+          }
         }
-        break; // Ya encontró y llenó uno, no sigue buscando
+        break;
       }
     }
   };

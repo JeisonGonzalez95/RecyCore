@@ -26,15 +26,12 @@
                         <input class="form-control" type="text" name="slug_product" id="slug_product" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="descripcion">Precio de compra:</label>
-                        <input class="form-control" type="number" name="price_product" id="price_product" min="0" required>
+                        <label for="descripcion">Precio de venta (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_sale" id="price_product_sale" min="0" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="descripcion">Estado:</label>
-                        <select class="form-control" name="state_product" id="state_product">
-                            <option value="0">Inactivo</option>
-                            <option value="1" selected>Activo</option>
-                        </select>
+                        <label for="descripcion">Precio de compra (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_purch" id="price_product_purch" min="0" required>
                     </div>
                 </div>
                 <div class="row justify-content-center">

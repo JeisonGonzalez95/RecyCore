@@ -17,7 +17,8 @@ class Products extends Migration
             $table->bigIncrements('id');
             $table->string('product_name', 100)->unique();
             $table->string('slug_product', 100)->unique(); 
-            $table->decimal('price_product', 10, 2); 
+            $table->decimal('price_product_sale', 10, 2); 
+            $table->decimal('price_product_purch', 10, 2); 
             $table->boolean('state')->default(true);
             $table->timestamps();
         });

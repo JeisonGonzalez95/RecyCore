@@ -19,6 +19,7 @@
                             <th>Item</th>
                             <th>Nombre</th>
                             <th>Sigla</th>
+                            <th>Precio de venta</th>
                             <th>Precio de compra</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -30,14 +31,16 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->product_name }}</td>
                             <td>{{ $product->slug_product }}</td>
-                            <td>{{ $product->price_product }}</td>
+                            <td>${{ round($product->price_product_sale) }}</td>
+                            <td>${{ round($product->price_product_purch) }}</td>
                             <td>{{ $product->state == 1 ? 'Activo' : 'Inactivo' }}</td>
                             @php
                             $dataProd = [
                             'id' => $product->id,
                             'name' => $product->product_name,
                             'slug' => $product->slug_product,
-                            'price' => $product->price_product,
+                            'price_sale' => round($product->price_product_sale),
+                            'price_purch' => round($product->price_product_purch),
                             'state' => $product->state
                             ];
                             @endphp

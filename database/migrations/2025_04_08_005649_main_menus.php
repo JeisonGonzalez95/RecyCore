@@ -21,9 +21,7 @@ class MainMenus extends Migration
             $table->bigIncrements('id');
             $table->string('name_item', 100);
             $table->string('route_item', 150); // Puede ser una ruta tipo "admin/usuarios"
-            $table->foreignId('main_menu_id')
-                  ->constrained('main_menus')
-                  ->onDelete('cascade');
+            $table->foreignId('main_menu_id')->constrained('main_menus')->onDelete('cascade');
             $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
@@ -31,7 +29,7 @@ class MainMenus extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('main_menus');
         Schema::dropIfExists('menu_items');
+        Schema::dropIfExists('main_menus');
     }
 }
