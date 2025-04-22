@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inventaryIn extends Model
+class InventaryIn extends Model
 {
     use HasFactory;
+
+    protected $table = 'inventary_in';
 
     protected $fillable = ['product_id', 'employee_id', 'amount_kg', 'description', 'date_in', 'state'];
 

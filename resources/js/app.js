@@ -2,6 +2,7 @@ require('./bootstrap');
 require('./sweetalert');
 require('./machine');
 require('./validatePsw');
+require('./formInventary');
 
 import Swal from 'sweetalert2';
 
@@ -186,6 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ejecutar al cargar y al redimensionar la ventana
     window.addEventListener('load', ajustarSidebarTop);
     window.addEventListener('resize', ajustarSidebarTop);
+
+
+
+    
+
+
 
 
 

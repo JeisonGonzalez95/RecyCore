@@ -274,3 +274,69 @@ body.no-animate .menu-superior a::after {
         opacity: 1;
     }
 }
+
+
+
+/* Centrar el contenedor principal */
+.container-white {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
+/* Variantes de tamaño */
+.container-white-1 { max-width: 400px; }
+.container-white-2 { max-width: 600px; }
+.container-white-3 { max-width: 800px; }
+.container-white-4 { max-width: 1000px; }
+
+/* Centrar el contenido dentro del contenedor */
+.container-white .row {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente si es necesario */
+    text-align: center; /* Opcional: para centrar el texto dentro de los elementos */
+}
+
+
+
+.button-plus {
+    display: inline-block;
+    padding: 2px; /* Aumentar el padding para que el botón sea más grande */
+    background-color: #28a745; /* Color verde elegante */
+    border-radius: 50%; /* Hacer el botón redondo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: all 0.3s ease; /* Transición suave para efectos de hover */
+    text-align: center; /* Asegurar que el icono se centre dentro del botón */
+}
+
+.button-plus a {
+    color: #ffffff; /* Color del icono */
+    font-size: 36px; /* Tamaño del icono más grande */
+    text-decoration: none; /* Eliminar subrayado */
+    display: inline-block;
+    line-height: 0; /* Eliminar cualquier espacio adicional alrededor del icono */
+}
+
+.button-plus:hover {
+    background-color: #218838; /* Color de fondo más oscuro en hover */
+    transform: translateY(-3px); /* Efecto de elevación en hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más fuerte en hover */
+}
+
+.button-plus:active {
+    transform: translateY(1px); /* Efecto de "presionar" cuando se hace clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera cuando se hace clic */
+}
+
+.prod {
+    display: flex;
+    justify-content: flex-end; /* alinea el texto a la derecha */
+    font-size: 12px;
+    color: grey;
+    font-weight: bold;
+}

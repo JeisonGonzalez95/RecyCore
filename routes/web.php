@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
     // Inventarios
     Route::get('/inventaryI', [invetaryController::class, 'inventaryInList'])->name('inventaryI');
     Route::get('/inventaryO', [invetaryController::class, 'inventaryOutList'])->name('inventaryO');
+    Route::get('/inventaryIf', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
+    Route::post('/inventaryOf', [invetaryController::class, 'inventaryOutAdd'])->name('inventaryOf');
 
     // Productos
     Route::get('/productList', [productsController::class, 'productsList'])->name('productList');

@@ -522,7 +522,6 @@ class ComposerStaticInitc61ff82cbf0142a401a48a8161e1595a
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Models\\EmployeeArea' => __DIR__ . '/../..' . '/app/Models/EmployeeArea.php',
         'App\\Models\\EmployeeRole' => __DIR__ . '/../..' . '/app/Models/EmployeeRole.php',
-        'App\\Models\\invetary' => __DIR__ . '/../..' . '/app/Models/invetary.php',
         'App\\Models\\mainMenus' => __DIR__ . '/../..' . '/app/Models/mainMenus.php',
         'App\\Models\\menuItems' => __DIR__ . '/../..' . '/app/Models/menuItems.php',
         'App\\Models\\product' => __DIR__ . '/../..' . '/app/Models/product.php',

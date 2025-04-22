@@ -67,7 +67,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Bogota',  // Ajusta esto según tu ubicación
+
 
     /*
     |--------------------------------------------------------------------------

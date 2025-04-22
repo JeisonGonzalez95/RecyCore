@@ -10,7 +10,7 @@
                     <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
                     <h2 class="fw-bold mb-0">Inventarios - Entradas</h2>
                 </div>
-                <a href="{{ route('registerEc') }}" class="btn btn-outline-primary"><i class="fa-solid fa-user-plus"></i> Agregar Producto</a>
+                <a href="{{ route('inventaryIf') }}" class="btn btn-outline-primary"><i class="fa-solid fa-user-plus"></i> Agregar Producto</a>
             </div>
 
             <div class="table-responsive">
@@ -21,24 +21,19 @@
                             <th>Cantidad (Kg)</th>
                             <th>Descripcion</th>
                             <th>Fecha de ingreso</th>
-                            <th>Acciones</th>
+                            <th>Usuario</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($products as $product)
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <a href="#" class="text-warning me-3" title="Editar">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
-                                <a href="javascript:void(0);" class="text-danger btn-delete"  title="Eliminar">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                            </td>
+                            <td>{{ $product->product->product_name }}</td>
+                            <td>{{ $product->amount_kg }}</td>
+                            <td>{{ $product->description }}</td>
+                            <td>{{ $product->date_in }}</td>
+                            <td>{{ $product->employee->fullname }}</td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -27,7 +27,6 @@ return array(
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Models\\EmployeeArea' => $baseDir . '/app/Models/EmployeeArea.php',
     'App\\Models\\EmployeeRole' => $baseDir . '/app/Models/EmployeeRole.php',
-    'App\\Models\\invetary' => $baseDir . '/app/Models/invetary.php',
     'App\\Models\\mainMenus' => $baseDir . '/app/Models/mainMenus.php',
     'App\\Models\\menuItems' => $baseDir . '/app/Models/menuItems.php',
     'App\\Models\\product' => $baseDir . '/app/Models/product.php',
