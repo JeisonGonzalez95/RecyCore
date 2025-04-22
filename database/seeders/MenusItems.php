@@ -19,8 +19,7 @@ class MenusItems extends Seeder
                 'slug' => 'adm',
                 'state' => 1,
                 'items' => [
-                    ['name' => 'Empleados', 'route' => 'employeesList'],
-                    ['name' => 'Cargos',    'route' => 'positionList'],
+                    ['name' => 'Empleados', 'route' => 'employeesList']
                 ],
             ],
             [
