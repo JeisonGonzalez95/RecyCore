@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\mainMenus;
 use App\Models\menuItems;
+use App\Models\ProductMoviment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class menusController extends Controller
 {
@@ -17,8 +19,18 @@ class menusController extends Controller
             ->where('state', 1)
             ->get();
 
-        return view('source.index', compact('menus'));
+        $data = ProductMoviment::join('products', 'products.id', '=', 'products_moviments.id_product')
+            ->select(
+                'products.product_name',
+                DB::raw('SUM(products_moviments.amount_kg) as total_kg'),
+                DB::raw('SUM(products_moviments.amount_kg * products_moviments.price_product) as total_cost')
+            )
+            ->groupBy('products.product_name')
+            ->get();
+
+        return view('source.index', compact('menus', 'data'));
     }
+
 
     public function menusItemsList()
     {
@@ -144,17 +156,16 @@ class menusController extends Controller
 
             $table = 'Menú';
             $accion = $newState == 1 ? 'Activado' : 'Desactivado';
-            
         } elseif ($moi == 2) {
             $item = menuItems::findOrFail($id);
-            
+
             $newState = $item->state == 1 ? 0 : 1;
-            
+
             $item->update([
                 'state' => $newState,
                 'updated_at' => now()
             ]);
-            
+
             $table = 'Item';
             $accion = $newState == 1 ? 'Activado' : 'Desactivado';
         }

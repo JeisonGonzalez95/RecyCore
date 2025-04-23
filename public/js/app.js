@@ -19,9 +19,9 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 __webpack_require__(/*! ./sweetalert */ "./resources/js/sweetalert.js");
-__webpack_require__(/*! ./machine */ "./resources/js/machine.js");
 __webpack_require__(/*! ./validatePsw */ "./resources/js/validatePsw.js");
 __webpack_require__(/*! ./formInventary */ "./resources/js/formInventary.js");
+__webpack_require__(/*! ./dashboard */ "./resources/js/dashboard.js");
 
 document.addEventListener('DOMContentLoaded', function () {
   // -------------------------------
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   window.mostrarFormulario = function (btn) {
     var formularioId = btn.getAttribute('data-form');
-    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId'];
+    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId'];
 
     // Ocultar todos los formularios
     document.querySelectorAll('.formulario').forEach(function (f) {
@@ -162,6 +162,15 @@ document.addEventListener('DOMContentLoaded', function () {
           userId: {
             'user_id': 'id',
             'username_e': 'username'
+          },
+          clientId: {
+            'id_client': 'id',
+            'name_client_e': 'name',
+            'nit_client_e': 'nit',
+            'phn_client_e': 'phone',
+            'email_client_e': 'email',
+            'address_e': 'address',
+            'state_client_e': 'state'
           }
         };
         var fields = fillMap[type];
@@ -171,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataKey = _Object$entries$_i[1];
           var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
           if (field) {
-            if (fieldName === 'state_product_e') {
+            if (fieldName === 'state_product_e' || fieldName === 'state_client_e') {
               field.checked = data[dataKey] == 1;
             } else {
               var _data$dataKey;
@@ -232,6 +241,55 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/dashboard.js":
+/*!***********************************!*\
+  !*** ./resources/js/dashboard.js ***!
+  \***********************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var dataDiv = document.getElementById('chart-data');
+  var chartCanvas = document.getElementById('movimentChart');
+  if (!dataDiv || !chartCanvas) return;
+
+  // Leer los atributos y convertirlos desde JSON
+  var labels = JSON.parse(dataDiv.dataset.labels);
+  var quantities = JSON.parse(dataDiv.dataset.quantities);
+  var costs = JSON.parse(dataDiv.dataset.costs);
+  var ctx = chartCanvas.getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Cantidad Ingresada (Kg)',
+        data: quantities,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2,
+        fill: true
+      }, {
+        label: 'Costo Total ($)',
+        data: costs,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
 
 /***/ }),
 
@@ -300,99 +358,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
-});
-
-/***/ }),
-
-/***/ "./resources/js/machine.js":
-/*!*********************************!*\
-  !*** ./resources/js/machine.js ***!
-  \*********************************/
-/***/ (() => {
-
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-document.addEventListener("DOMContentLoaded", function () {
-  if (!document.getElementById("tragamonedas")) return;
-  var btnGirar = document.getElementById("girar");
-  var carruseles = document.querySelectorAll(".contenedor");
-  var mensaje = document.getElementById("mensaje");
-  var tragamonedas = document.getElementById("tragamonedas");
-  var slideHeight = 280;
-  var totalSlides = 5;
-  function reiniciarCarruseles() {
-    carruseles.forEach(function (contenedor) {
-      contenedor.style.transition = "none";
-      contenedor.style.transform = "translateY(0px)";
-      contenedor.querySelectorAll(".slide").forEach(function (slide) {
-        return slide.classList.remove("glow");
-      });
-    });
-    mensaje.style.opacity = "0";
-  }
-  function girarCarrusel(contenedor, delay, callback) {
-    var inicioGiro = performance.now();
-    var velocidad = 30;
-    var animando = true;
-    function animarGiro(tiempoActual) {
-      if (!animando) return;
-      var tiempoTranscurrido = tiempoActual - inicioGiro;
-      var desplazamiento = tiempoTranscurrido * velocidad % (totalSlides * slideHeight);
-      contenedor.style.transform = "translateY(-".concat(desplazamiento, "px)");
-      requestAnimationFrame(animarGiro);
-    }
-    requestAnimationFrame(animarGiro);
-    setTimeout(function () {
-      animando = false;
-      var indiceFinal = Math.floor(Math.random() * totalSlides);
-      var desplazamientoFinal = indiceFinal * slideHeight - slideHeight / 2 + contenedor.parentElement.clientHeight / 2;
-      contenedor.style.transition = "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)";
-      contenedor.style.transform = "translateY(-".concat(desplazamientoFinal, "px)");
-      setTimeout(function () {
-        contenedor.children[indiceFinal].classList.add("glow");
-        callback(indiceFinal);
-      }, 800);
-    }, delay);
-  }
-  btnGirar.addEventListener("click", function () {
-    btnGirar.disabled = true;
-    tragamonedas.style.opacity = "1"; // Mostrar la máquina
-    reiniciarCarruseles();
-    var resultados = [];
-    var girosCompletados = 0;
-    carruseles.forEach(function (contenedor, i) {
-      girarCarrusel(contenedor, 2000 + i * 300, function (indice) {
-        resultados[i] = indice;
-        girosCompletados++;
-        if (girosCompletados === carruseles.length) {
-          mostrarMensaje(resultados);
-          setTimeout(function () {
-            mensaje.style.opacity = "0";
-            tragamonedas.style.opacity = "0"; // Ocultar después de 5 segundos
-            btnGirar.disabled = false;
-          }, 5000);
-        }
-      });
-    });
-  });
-  function mostrarMensaje(resultados) {
-    var _resultados = _slicedToArray(resultados, 3),
-      r1 = _resultados[0],
-      r2 = _resultados[1],
-      r3 = _resultados[2];
-    if (r1 === r2 && r2 === r3) {
-      mensaje.innerText = "¡GANASTE! 🎉";
-    } else if (r1 === r2 || r1 === r3 || r2 === r3) {
-      mensaje.innerText = "¡CASI! 😬";
-    } else {
-      mensaje.innerText = "Sigue intentando 😢";
-    }
-    mensaje.style.opacity = "1";
-  }
 });
 
 /***/ }),

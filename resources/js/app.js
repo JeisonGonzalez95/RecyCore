@@ -1,8 +1,8 @@
 require('./bootstrap');
 require('./sweetalert');
-require('./machine');
 require('./validatePsw');
 require('./formInventary');
+require('./dashboard');
 
 import Swal from 'sweetalert2';
 
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.mostrarFormulario = function (btn) {
         const formularioId = btn.getAttribute('data-form');
-        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId'];
+        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId'];
 
         // Ocultar todos los formularios
         document.querySelectorAll('.formulario').forEach(f => f.style.display = 'none');
@@ -152,6 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     userId: {
                         'user_id': 'id',
                         'username_e': 'username'
+                    },
+                    clientId: {
+                        'id_client': 'id',
+                        'name_client_e': 'name',
+                        'nit_client_e': 'nit',
+                        'phn_client_e': 'phone',
+                        'email_client_e': 'email',
+                        'address_e': 'address',
+                        'state_client_e': 'state'
                     }
                 };
 
@@ -159,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (const [fieldName, dataKey] of Object.entries(fields)) {
                     const field = document.querySelector(`[name="${fieldName}"]`);
                     if (field) {
-                        if (fieldName === 'state_product_e') {
+                        if (fieldName === 'state_product_e' || fieldName === 'state_client_e') {
                             field.checked = data[dataKey] == 1;
                         } else {
                             field.value = data[dataKey] ?? '';

@@ -19,7 +19,9 @@ class MenusItems extends Seeder
                 'slug' => 'adm',
                 'state' => 1,
                 'items' => [
-                    ['name' => 'Empleados', 'route' => 'employeesList']
+                    ['name' => 'Empleados', 'route' => 'employeesList'],
+                    ['name' => 'Productos',   'route' => 'productList'],
+                    ['name' => 'Clientes', 'route' => 'clientList']
                 ],
             ],
             [
@@ -36,9 +38,7 @@ class MenusItems extends Seeder
                 'slug' => 'sis',
                 'state' => 1,
                 'items' => [
-                    ['name' => 'Menus',     'route' => 'menusList'],
-                    ['name' => 'Productos',   'route' => 'productList'],
-                    ['name' => 'Reportes', 'route' => 'machine'],
+                    ['name' => 'Menus',     'route' => 'menusList']
                 ],
             ],
         ];

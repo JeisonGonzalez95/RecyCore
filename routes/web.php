@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\clientsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\employeesController;
 use App\Http\Controllers\invetaryController;
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Menús
     Route::get('/index', [menusController::class, 'mainMenus'])->name('index');
+    
     Route::get('/menusL', [menusController::class, 'menusItemsList'])->name('menusList');
     Route::post('/registerMn', [menusController::class, 'createMenu'])->name('register_mn');
     Route::post('/registerIt', [menusController::class, 'createItem'])->name('register_it');
@@ -66,6 +68,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/productList', [productsController::class, 'productsList'])->name('productList');
     Route::post('/productR', [productsController::class, 'createProduct'])->name('productR');
     Route::post('/productE', [productsController::class, 'editProduct'])->name('productE');
+    
+    // Clientes
+    
+    Route::get('/clientList', [clientsController::class, 'clientsList'])->name('clientList');
+    Route::post('/clientR', [clientsController::class, 'createClient'])->name('clientR');
+    Route::post('/clientE', [clientsController::class, 'editClient'])->name('clientE');
+
 
     // Máquina
     Route::get('machine', function () { return view('source.tickets'); })->name('machine');
