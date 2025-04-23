@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InventaryOut extends Model
+class MovimentsIn extends Model
 {
     use HasFactory;
 
-    protected $table = 'inventary_out';
+    protected $table = 'moviments_in';
 
-    protected $fillable = ['product_id', 'employee_id', 'amount_kg', 'description', 'date_out', 'state'];
+    protected $fillable = ['name_client', 'employee_id', 'date_in', 'description'];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
     }
 
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(ProductMoviment::class, 'id_moviment_in');
     }
 }

@@ -53,7 +53,13 @@ Route::middleware(['auth'])->group(function () {
     // Inventarios
     Route::get('/inventaryI', [invetaryController::class, 'inventaryInList'])->name('inventaryI');
     Route::get('/inventaryO', [invetaryController::class, 'inventaryOutList'])->name('inventaryO');
-    Route::get('/inventaryIf', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
+    Route::get('/inventaryIf/{tp}', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
+    Route::post('/addMoviment', [invetaryController::class, 'regMovimentsIn'])->name('addMoviment');
+    Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
+
+
+
+
     Route::post('/inventaryOf', [invetaryController::class, 'inventaryOutAdd'])->name('inventaryOf');
 
     // Productos

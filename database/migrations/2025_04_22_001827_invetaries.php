@@ -6,48 +6,41 @@ use Illuminate\Support\Facades\Schema;
 
 class Invetaries extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        //
-
-        Schema::create('inventary_in', function (Blueprint $table) {
+        Schema::create('moviments_in', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->text('name_client')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-            $table->decimal('amount_kg', 10, 2);
-            $table->text('description')->nullable();
             $table->date('date_in');
-            $table->boolean('state')->default(true);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 
-
-        Schema::create('inventary_out', function (Blueprint $table) {
+        Schema::create('moviments_out', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->text('name_client')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-            $table->decimal('amount_kg', 10, 2);
-            $table->text('description')->nullable();
             $table->date('date_out');
-            $table->boolean('state')->default(true);
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('products_moviments', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('id_moviment_in')->nullable()->constrained('moviments_in')->onDelete('cascade');
+            $table->foreignId('id_moviment_out')->nullable()->constrained('moviments_out')->onDelete('cascade');
+            $table->foreignId('id_product')->constrained('products')->onDelete('cascade');
+            $table->decimal('amount_kg', 10, 2);
+            $table->unsignedBigInteger('price_product');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        //
-        Schema::dropIfExists('inventary_in');
-        Schema::dropIfExists('inventary_out');
+        Schema::dropIfExists('products_moviments');
+        Schema::dropIfExists('moviments_out');
+        Schema::dropIfExists('moviments_in');
     }
 }

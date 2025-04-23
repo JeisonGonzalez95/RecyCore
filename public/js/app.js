@@ -242,46 +242,61 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /***/ (() => {
 
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('add-item').addEventListener('click', function (e) {
-    e.preventDefault(); // Evita el comportamiento por defecto del enlace
+  // Función para actualizar el precio
+  function updatePrice(row) {
+    var productSelect = row.querySelector('.product-select');
+    var amountInput = row.querySelector('input[name="amount[]"]');
+    var priceInput = row.querySelector('input[name="price[]"]');
+    var selectedOption = productSelect.options[productSelect.selectedIndex];
+    var unitPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+    var amount = parseFloat(amountInput.value) || 0;
+    var total = unitPrice * amount;
+    priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
+  }
 
-    // Encuentra la fila original (la primera) que se quiere duplicar
-    var productRow = document.querySelector('.product-item');
-
-    // Clona la fila
-    var newProductRow = productRow.cloneNode(true);
-
-    // Limpia los campos del nuevo "row" para que estén vacíos
-    newProductRow.querySelectorAll('input').forEach(function (input) {
-      return input.value = '';
+  // Función para asociar eventos a cada fila
+  function bindEventsToRow(row) {
+    var productSelect = row.querySelector('.product-select');
+    var amountInput = row.querySelector('input[name="amount[]"]');
+    productSelect.addEventListener('change', function () {
+      return updatePrice(row);
     });
+    amountInput.addEventListener('input', function () {
+      return updatePrice(row);
+    });
+  }
 
-    // Reemplaza el ID de delete_item para evitar conflictos
+  // Inicializar los que ya están al cargar la página
+  document.querySelectorAll('.product-item').forEach(bindEventsToRow);
+
+  // Evento para agregar una nueva fila de productos
+  document.getElementById('add-item').addEventListener('click', function (e) {
+    e.preventDefault();
+    var productRow = document.querySelector('.product-item');
+    var newProductRow = productRow.cloneNode(true);
+    newProductRow.querySelectorAll('input').forEach(function (input) {
+      return input.value = '0';
+    });
+    newProductRow.querySelector('select[name="product[]"]').selectedIndex = 0;
     var deleteButton = newProductRow.querySelector('#delete_item');
-
-    // Habilitar el botón de eliminar en los ítems agregados
     deleteButton.removeAttribute('disabled');
-
-    // Añadir evento al botón de eliminar
     deleteButton.addEventListener('click', function (e) {
       e.preventDefault();
-      newProductRow.remove(); // Elimina la fila correspondiente
+      newProductRow.remove();
     });
-
-    // Agrega la nueva fila al contenedor
     document.querySelector('.product-container').appendChild(newProductRow);
+    bindEventsToRow(newProductRow); // Asocia los eventos a la nueva fila
   });
 
-  // Añadir evento para los botones de eliminar en las filas existentes
+  // Evento para eliminar un producto
   document.querySelectorAll('#delete_item').forEach(function (button) {
-    // Verificar si es el primer ítem y deshabilitar el botón de eliminar
     if (button.closest('.product-item').isEqualNode(document.querySelector('.product-item'))) {
       button.setAttribute('disabled', 'true');
     } else {
       button.addEventListener('click', function (e) {
         e.preventDefault();
-        var rowToDelete = button.closest('.product-item'); // Encuentra la fila más cercana al botón
-        rowToDelete.remove(); // Elimina la fila correspondiente
+        var rowToDelete = button.closest('.product-item');
+        rowToDelete.remove();
       });
     }
   });
