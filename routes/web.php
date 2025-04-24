@@ -58,7 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventaryIf/{tp}', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
     Route::post('/addMoviment', [invetaryController::class, 'regMovimentsIn'])->name('addMoviment');
     Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
-
+    Route::get('/descInvIn/{id}', [invetaryController::class, 'descInventaryIn'])->name('descInvIn');
+    Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac');
 
 
 
@@ -78,4 +79,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Máquina
     Route::get('machine', function () { return view('source.tickets'); })->name('machine');
+
+
+
 });

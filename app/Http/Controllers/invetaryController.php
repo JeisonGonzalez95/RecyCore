@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Client;
 use App\Models\MovimentsIn;
 use App\Models\MovimentsOut;
 use App\Models\product;
 use App\Models\ProductMoviment;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class invetaryController extends Controller
@@ -51,10 +52,12 @@ class invetaryController extends Controller
             'description' => 'Temporal'
         ]);
 
+        $clients = Client::where('state', 1)->get();
+
         $lastId = $idIn->id;
         $products = product::all();
 
-        return view('inventary.inventaryInR', compact('products', 'lastId', 'tp'));
+        return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients'));
     }
 
     public function regMovimentsIn(Request $request)
@@ -88,10 +91,36 @@ class invetaryController extends Controller
 
         return redirect()->route('inventaryI')->with('alerta', [
             'titulo' => '¡Éxito!',
-            'mensaje' => 'Movimiento N° '. $movId .' agregado correctamente.',
+            'mensaje' => 'Movimiento N° ' . $movId . ' agregado correctamente.',
             'icono' => 'success',
             'confirmarTexto' => 'Entendido',
             'mostrarCancelar' => false
         ]);
+    }
+
+    public function descInventaryIn($id)
+    {
+        $invin = MovimentsIn::findOrFail($id);
+        $invproducts = ProductMoviment::where('id_moviment_in', $invin->id)->get();
+
+        $totalPrice = $invproducts->sum('price_product');
+
+        return view('inventary.inventaryInD', compact('invin', 'invproducts', 'totalPrice'));
+    }
+
+    public function dwnlBill($id)
+    {
+        $moviment = MovimentsIn::with('products.product')->findOrFail($id);
+
+        $client = Client::where('name', $moviment->name_client)->first();
+        $isClient = $client ? 1 : 0;
+
+        $pdf = Pdf::loadView('inventary.pdf', [
+            'moviment' => $moviment,
+            'isClient' => $isClient,
+            'client' => $client
+        ]);
+
+        return $pdf->download("FCT_00000{$moviment->id}.pdf");
     }
 }

@@ -23,7 +23,12 @@
                         @else
                         <div class="col-md-4 d-flex align-items-center mb-3">
                             <label for="client" class="me-2 mb-0" style="white-space: nowrap;">Empresa:</label>
-                            <input type="text" id="corp" name="corp" class="form-control" placeholder="Empresa" required>
+                            <select name="client" id="client" class="form-control" required>
+                                <option value="">Seleccione Uno...</option>
+                                @foreach ($clients as $client )
+                                <option value="{{ $client->name }}"> {{ $client->name }} </option>                                    
+                                @endforeach
+                            </select>
                         </div>
                         @endif
                         <div class="col-md-4 d-flex align-items-center mb-3">
