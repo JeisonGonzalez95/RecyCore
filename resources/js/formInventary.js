@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const priceInput = row.querySelector('input[name="price[]"]');
 
         const selectedOption = productSelect.options[productSelect.selectedIndex];
-        const unitPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
-        const amount = parseFloat(amountInput.value) || 0;
+        const unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
+
+        // Reemplazo interno para cálculo
+        const amountRaw = amountInput.value.replace(',', '.');
+        const amount = parseFloat(amountRaw) || 0;
 
         const total = unitPrice * amount;
         priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
@@ -19,8 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
 
+        // Convertir punto a coma en el input visible del usuario
+        amountInput.addEventListener('input', () => {
+            amountInput.value = amountInput.value.replace('.', ',');
+            updatePrice(row); // Calcular con coma convertida a punto internamente
+        });
+
         productSelect.addEventListener('change', () => updatePrice(row));
-        amountInput.addEventListener('input', () => updatePrice(row));
     }
 
     // Inicializar los que ya están al cargar la página

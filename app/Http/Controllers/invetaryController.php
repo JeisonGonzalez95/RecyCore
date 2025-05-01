@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Collector;
 use App\Models\MovimentsIn;
 use App\Models\MovimentsOut;
 use App\Models\product;
@@ -53,11 +54,12 @@ class invetaryController extends Controller
         ]);
 
         $clients = Client::where('state', 1)->get();
+        $collectors = Collector::where('state', 1)->get();
 
         $lastId = $idIn->id;
         $products = product::all();
 
-        return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients'));
+        return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients', 'collectors'));
     }
 
     public function regMovimentsIn(Request $request)
@@ -65,11 +67,13 @@ class invetaryController extends Controller
         $request->validate([
             'client' => 'required',
             'product.*' => 'required|exists:products,id',
-            'amount.*' => 'required|numeric|min:0',
-            'price.*' => 'nullable|numeric|min:0',
+            'amount.*' => 'required',
+            'price.*' => 'nullable'
         ]);
 
         $products = $request->input('product');
+        $amounts = $request->input('amount');
+        $prices = $request->input('price');
 
         $movId = $request->movId;
         $movUpd = MovimentsIn::findOrFail($movId);
@@ -81,11 +85,14 @@ class invetaryController extends Controller
         ]);
 
         foreach ($products as $index => $productId) {
+            $amount = str_replace(',', '.', $amounts[$index]);
+            $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
+
             ProductMoviment::create([
                 'id_moviment_in' => $movId,
                 'id_product' => $productId,
-                'amount_kg' => $request->amount[$index],
-                'price_product' => $request->price[$index]
+                'amount_kg' => floatval($amount),
+                'price_product' => $price !== null ? floatval($price) : null
             ]);
         }
 
@@ -97,6 +104,7 @@ class invetaryController extends Controller
             'mostrarCancelar' => false
         ]);
     }
+
 
     public function descInventaryIn($id)
     {

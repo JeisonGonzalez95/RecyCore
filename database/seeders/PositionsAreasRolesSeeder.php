@@ -35,7 +35,7 @@ class PositionsAreasRolesSeeder extends Seeder
             'Marketing y estrategias',
             'Logistica',
             'Desarrollo',
-            'Ventas'
+            'Comercial'
         ];
         $areaIds = [];
 

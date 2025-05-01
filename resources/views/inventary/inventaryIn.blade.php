@@ -16,9 +16,9 @@
                             <i class="fa-solid fa-user-plus"></i> Agregar Producto
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('inventaryIf', ['tp' => 1]) }}">Persona natural</a>
+                            <li><a class="dropdown-item" href="{{ route('inventaryIf', ['tp' => 1]) }}">Recolector</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('inventaryIf', ['tp' => 2]) }}">Empresa</a></li>
+                            <li><a class="dropdown-item" href="{{ route('inventaryIf', ['tp' => 2]) }}">Fuente</a></li>
                         </ul>
                     </div>
                 </div>

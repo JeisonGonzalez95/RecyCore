@@ -11,17 +11,13 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 __webpack_require__(/*! ./sweetalert */ "./resources/js/sweetalert.js");
 __webpack_require__(/*! ./validatePsw */ "./resources/js/validatePsw.js");
 __webpack_require__(/*! ./formInventary */ "./resources/js/formInventary.js");
 __webpack_require__(/*! ./dashboard */ "./resources/js/dashboard.js");
+__webpack_require__(/*! ./countrys */ "./resources/js/countrys.js");
+__webpack_require__(/*! ./editForms */ "./resources/js/editForms.js");
 
 document.addEventListener('DOMContentLoaded', function () {
   // -------------------------------
@@ -124,9 +120,202 @@ document.addEventListener('DOMContentLoaded', function () {
       localStorage.setItem('sidebarActivo', this.href);
     });
   });
+  function ajustarSidebarTop() {
+    var navbar = document.querySelector('.navbar');
+    var sidebar = document.querySelector('.sidebar');
+    if (navbar && sidebar) {
+      var alturaNavbar = navbar.offsetHeight;
+      sidebar.style.top = "".concat(alturaNavbar, "px");
+    }
+  }
+
+  // Ejecutar al cargar y al redimensionar la ventana
+  window.addEventListener('load', ajustarSidebarTop);
+  window.addEventListener('resize', ajustarSidebarTop);
+  document.querySelectorAll('.numeric-comma').forEach(function (input) {
+    input.addEventListener('input', function () {
+      // Reemplaza punto por coma en la visualización
+      this.value = this.value.replace(/[^\d.,]/g, '') // Elimina todo lo que no sea número, punto o coma
+      .replace(/\./g, ','); // Reemplaza puntos por comas
+    });
+    input.addEventListener('blur', function () {
+      // Si se usa para cálculos internos, puedes convertirlo a número real aquí si necesitas
+      var valor = this.value.replace(',', '.');
+      if (!isNaN(valor)) {
+        this.dataset.realValue = parseFloat(valor); // Por si necesitas el valor como número real
+      }
+    });
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/bootstrap.js":
+/*!***********************************!*\
+  !*** ./resources/js/bootstrap.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+
+/**
+ * We'll load the axios HTTP library which allows us to easily issue requests
+ * to our Laravel back-end. This library automatically handles sending the
+ * CSRF token as a header based on the value of the "XSRF" token cookie.
+ */
+
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/dist/browser/axios.cjs");
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+
+// import Echo from 'laravel-echo';
+
+// window.Pusher = require('pusher-js');
+
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     forceTLS: true
+// });
+
+/***/ }),
+
+/***/ "./resources/js/countrys.js":
+/*!**********************************!*\
+  !*** ./resources/js/countrys.js ***!
+  \**********************************/
+/***/ (() => {
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Función para cargar los países en el select de país
+  function loadCountries(selectId) {
+    fetch('https://restcountries.com/v3.1/all').then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      var countrySelect = document.getElementById(selectId); // El campo select
+      var sorted = data.sort(function (a, b) {
+        return a.name.common.localeCompare(b.name.common);
+      });
+
+      // Limpiar las opciones previas
+      countrySelect.innerHTML = '<option value="">Seleccione Uno...</option>';
+
+      // Agregar las opciones de países
+      sorted.forEach(function (country) {
+        if (country.name && country.cca2) {
+          var option = document.createElement('option');
+          option.value = country.cca2; // Siglas del país como valor
+          option.textContent = country.name.common; // Nombre visible del país
+          countrySelect.appendChild(option);
+        }
+      });
+    })["catch"](function (error) {
+      return console.error('Error cargando países:', error);
+    });
+  }
+
+  // Cargar los países en los formularios de registro y edición
+  loadCountries('country'); // Campo para el formulario de registro
+  loadCountries('country_e'); // Campo para el formulario de edición
+});
+
+/***/ }),
+
+/***/ "./resources/js/dashboard.js":
+/*!***********************************!*\
+  !*** ./resources/js/dashboard.js ***!
+  \***********************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var chartData = document.getElementById('chart-data');
+  var labels = JSON.parse(chartData.dataset.labels);
+  var quantities = JSON.parse(chartData.dataset.quantities);
+  var costs = JSON.parse(chartData.dataset.costs);
+
+  // 1. Gráfico de Pastel (Pie)
+  new Chart(document.getElementById('chartPie'), {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Kilos totales',
+        data: quantities,
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+      }]
+    }
+  });
+
+  // 2. Gráfico de Línea (Line)
+  new Chart(document.getElementById('chartLine'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Costo total',
+        data: costs,
+        borderColor: '#36A2EB',
+        backgroundColor: 'rgba(54,162,235,0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    }
+  });
+
+  // 3. Gráfico de Barras Verticales (Bar)
+  new Chart(document.getElementById('chartBar'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Kilos totales',
+        data: quantities,
+        backgroundColor: '#FF6384'
+      }]
+    }
+  });
+
+  // 4. Gráfico de Barras Horizontales
+  new Chart(document.getElementById('chartBarHorizontal'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Costo total',
+        data: costs,
+        backgroundColor: '#4BC0C0'
+      }]
+    },
+    options: {
+      indexAxis: 'y' // 👉 Esto cambia de vertical a horizontal
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/editForms.js":
+/*!***********************************!*\
+  !*** ./resources/js/editForms.js ***!
+  \***********************************/
+/***/ (() => {
+
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+document.addEventListener("DOMContentLoaded", function () {
   window.mostrarFormulario = function (btn) {
     var formularioId = btn.getAttribute('data-form');
-    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId'];
+    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId'];
 
     // Ocultar todos los formularios
     document.querySelectorAll('.formulario').forEach(function (f) {
@@ -171,6 +360,17 @@ document.addEventListener('DOMContentLoaded', function () {
             'email_client_e': 'email',
             'address_e': 'address',
             'state_client_e': 'state'
+          },
+          collectorId: {
+            'id_coll': 'id',
+            'name_coll_e': 'name',
+            'type_doc_e': 'type_dni',
+            'dni_coll_e': 'dni',
+            'country_e': 'country',
+            'phn_coll_e': 'phone',
+            'email_coll_e': 'email',
+            'address_e': 'address',
+            'state_coll_e': 'state'
           }
         };
         var fields = fillMap[type];
@@ -180,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataKey = _Object$entries$_i[1];
           var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
           if (field) {
-            if (fieldName === 'state_product_e' || fieldName === 'state_client_e') {
+            if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e') {
               field.checked = data[dataKey] == 1;
             } else {
               var _data$dataKey;
@@ -188,107 +388,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }
         }
+
+        // Seleccionar el país en el campo 'country_e' (edición)
+        var countrySelectEdit = document.getElementById('country_e'); // Campo de país en edición
+        if (countrySelectEdit) {
+          var countryCode = data.country; // Obtener el código del país asignado (ejemplo: 'CO')
+          var option = countrySelectEdit.querySelector("option[value=\"".concat(countryCode, "\"]"));
+          if (option) {
+            option.selected = true; // Selecciona el país correspondiente
+          }
+        }
         break;
       }
     }
   };
-  function ajustarSidebarTop() {
-    var navbar = document.querySelector('.navbar');
-    var sidebar = document.querySelector('.sidebar');
-    if (navbar && sidebar) {
-      var alturaNavbar = navbar.offsetHeight;
-      sidebar.style.top = "".concat(alturaNavbar, "px");
-    }
-  }
-
-  // Ejecutar al cargar y al redimensionar la ventana
-  window.addEventListener('load', ajustarSidebarTop);
-  window.addEventListener('resize', ajustarSidebarTop);
-});
-
-/***/ }),
-
-/***/ "./resources/js/bootstrap.js":
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/dist/browser/axios.cjs");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from 'laravel-echo';
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
-
-/***/ }),
-
-/***/ "./resources/js/dashboard.js":
-/*!***********************************!*\
-  !*** ./resources/js/dashboard.js ***!
-  \***********************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var dataDiv = document.getElementById('chart-data');
-  var chartCanvas = document.getElementById('movimentChart');
-  if (!dataDiv || !chartCanvas) return;
-
-  // Leer los atributos y convertirlos desde JSON
-  var labels = JSON.parse(dataDiv.dataset.labels);
-  var quantities = JSON.parse(dataDiv.dataset.quantities);
-  var costs = JSON.parse(dataDiv.dataset.costs);
-  var ctx = chartCanvas.getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Cantidad Ingresada (Kg)',
-        data: quantities,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 2,
-        fill: true
-      }, {
-        label: 'Costo Total ($)',
-        data: costs,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
 });
 
 /***/ }),
@@ -306,8 +419,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var amountInput = row.querySelector('input[name="amount[]"]');
     var priceInput = row.querySelector('input[name="price[]"]');
     var selectedOption = productSelect.options[productSelect.selectedIndex];
-    var unitPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
-    var amount = parseFloat(amountInput.value) || 0;
+    var unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
+
+    // Reemplazo interno para cálculo
+    var amountRaw = amountInput.value.replace(',', '.');
+    var amount = parseFloat(amountRaw) || 0;
     var total = unitPrice * amount;
     priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
   }
@@ -316,10 +432,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function bindEventsToRow(row) {
     var productSelect = row.querySelector('.product-select');
     var amountInput = row.querySelector('input[name="amount[]"]');
-    productSelect.addEventListener('change', function () {
-      return updatePrice(row);
-    });
+
+    // Convertir punto a coma en el input visible del usuario
     amountInput.addEventListener('input', function () {
+      amountInput.value = amountInput.value.replace('.', ',');
+      updatePrice(row); // Calcular con coma convertida a punto internamente
+    });
+    productSelect.addEventListener('change', function () {
       return updatePrice(row);
     });
   }
@@ -19809,19 +19928,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/css/machine.css":
-/*!***********************************!*\
-  !*** ./resources/css/machine.css ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
 /***/ "./resources/css/body.css":
 /*!********************************!*\
   !*** ./resources/css/body.css ***!
@@ -28519,7 +28625,6 @@ module.exports = axios;
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
 /******/ 			"css/body": 0,
-/******/ 			"css/machine": 0,
 /******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
@@ -28570,10 +28675,9 @@ module.exports = axios;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/body","css/machine","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/body","css/machine","css/app"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_require__.O(undefined, ["css/body","css/machine","css/app"], () => (__webpack_require__("./resources/css/machine.css")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/body","css/machine","css/app"], () => (__webpack_require__("./resources/css/body.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/body","css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/body","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/body","css/app"], () => (__webpack_require__("./resources/css/body.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

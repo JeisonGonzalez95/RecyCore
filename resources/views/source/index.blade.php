@@ -53,22 +53,36 @@
 </div>
 @endsection
 
-{{--@section('contentR')
+@section('contentR')
+@if (isset($data))
 <div class="content-wrapper">
     <div class="card bg-glass shadow-sm">
         <div class="card-body px-4 py-5 px-md-5 text-center">
             <div class="container">
                 <h2 class="mb-4">Dashboard de Movimientos</h2>
-                <canvas id="movimentChart" width="400" height="200"></canvas>
-            </div>
+                <div id="chart-data"
+                    data-labels='@json($data->pluck("product_name"))'
+                    data-quantities='@json($data->pluck("total_kg"))'
+                    data-costs='@json($data->pluck("total_cost"))'>
+                </div>
 
-            <div id="chart-data"
-                data-labels="{{ htmlspecialchars(json_encode($data->pluck('product_name')), ENT_QUOTES, 'UTF-8') }}"
-                data-quantities="{{ htmlspecialchars(json_encode($data->pluck('total_kg')), ENT_QUOTES, 'UTF-8') }}"
-                data-costs="{{ htmlspecialchars(json_encode($data->pluck('total_cost')), ENT_QUOTES, 'UTF-8') }}">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <canvas id="chartPie" style="max-width: 70%; max-height: 70%;"></canvas>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <canvas id="chartLine"></canvas>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <canvas id="chartBar"></canvas>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <canvas id="chartBarHorizontal"></canvas>
+                    </div>
+                </div>
             </div>
-            <canvas id="movimentChart" width="400" height="200"></canvas>
         </div>
     </div>
 </div>
-@endsection--}}
+@endif
+@endsection

@@ -11,15 +11,15 @@ class UserLoginAdmin extends Seeder
 {
     public function run()
     {
-        $exists = DB::table('users_app')->where('username', 'admin')->exists();
+        $exists = DB::table('users_app')->where('username', 'adminRc')->exists();
 
         if (!$exists) {
             DB::table('users_app')->insert([
                 'fullname' => 'Admin RecyCore',
-                'dni' => 1000000000,
-                'email' => 'admin@example.com',
-                'username' => 'admin',
-                'password' => Hash::make('admin123'),
+                'dni' => 1023946796,
+                'email' => 'admin@recyplus.com',
+                'username' => 'adminRc',
+                'password' => Hash::make('AdminRecycore1901'),
                 'state' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -27,9 +27,9 @@ class UserLoginAdmin extends Seeder
 
             DB::table('employees')->insert([
                 'fullname' => 'Admin RecyCore',
-                'dni' => 1000000000,
-                'email' => 'admin@example.com',
-                'phone' => '10000100010',
+                'dni' => 1023946796,
+                'email' => 'admin@recyplus.com',
+                'phone' => '3102413174',
                 'rol_id' => '1',
                 'area_id' => '4',
                 'state' => 1,

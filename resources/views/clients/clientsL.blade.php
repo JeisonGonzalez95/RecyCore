@@ -8,9 +8,9 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
-                    <h2 class="fw-bold mb-0">Clientes</h2>
+                    <h2 class="fw-bold mb-0">Fuentes</h2>
                 </div>
-                <button popovertarget="clientsR" popovertargetaction="show" class="btn btn-outline-primary" data-form="formProdR" onclick="mostrarFormulario(this)"><i class="fa-solid fa-user-plus"></i> Agregar Cliente</button>
+                <button popovertarget="clientsR" popovertargetaction="show" class="btn btn-outline-primary" data-form="formProdR" onclick="mostrarFormulario(this)"><i class="fa-solid fa-user-plus"></i> Agregar Fuente</button>
             </div>
             <div class="table-responsive">
                 <table id="tablaEmpleados" class="table table-striped table-hover table-bordered text-center align-middle">

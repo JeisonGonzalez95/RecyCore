@@ -1,46 +1,64 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const dataDiv = document.getElementById('chart-data');
-    const chartCanvas = document.getElementById('movimentChart');
+    const chartData = document.getElementById('chart-data');
+    const labels = JSON.parse(chartData.dataset.labels);
+    const quantities = JSON.parse(chartData.dataset.quantities);
+    const costs = JSON.parse(chartData.dataset.costs);
 
-    if (!dataDiv || !chartCanvas) return;
+    // 1. Gráfico de Pastel (Pie)
+    new Chart(document.getElementById('chartPie'), {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Kilos totales',
+                data: quantities,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+            }]
+        }
+    });
 
-    // Leer los atributos y convertirlos desde JSON
-    const labels = JSON.parse(dataDiv.dataset.labels);
-    const quantities = JSON.parse(dataDiv.dataset.quantities);
-    const costs = JSON.parse(dataDiv.dataset.costs);
-
-    const ctx = chartCanvas.getContext('2d');
-
-    new Chart(ctx, {
+    // 2. Gráfico de Línea (Line)
+    new Chart(document.getElementById('chartLine'), {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [
-                {
-                    label: 'Cantidad Ingresada (Kg)',
-                    data: quantities,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    fill: true
-                },
-                {
-                    label: 'Costo Total ($)',
-                    data: costs,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2,
-                    fill: true
-                }
-            ]
+            datasets: [{
+                label: 'Costo total',
+                data: costs,
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54,162,235,0.2)',
+                fill: true,
+                tension: 0.4
+            }]
+        }
+    });
+
+    // 3. Gráfico de Barras Verticales (Bar)
+    new Chart(document.getElementById('chartBar'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Kilos totales',
+                data: quantities,
+                backgroundColor: '#FF6384'
+            }]
+        }
+    });
+
+    // 4. Gráfico de Barras Horizontales
+    new Chart(document.getElementById('chartBarHorizontal'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Costo total',
+                data: costs,
+                backgroundColor: '#4BC0C0'
+            }]
         },
         options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+            indexAxis: 'y', // 👉 Esto cambia de vertical a horizontal
         }
     });
 });

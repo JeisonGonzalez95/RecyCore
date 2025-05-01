@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Products extends Migration
+class Collector extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class Products extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('collectors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('product_name', 100)->unique();
-            $table->string('slug_product', 100)->unique(); 
-            $table->decimal('price_product_sale', 10, 2); 
-            $table->decimal('price_product_purch_f', 10, 2); 
-            $table->decimal('price_product_purch_c', 10, 2); 
+            $table->string('name', 100)->unique();
+            $table->string('type_dni', 100);
+            $table->string('dni', 100)->unique();
+            $table->char('country', 2);
+            $table->bigInteger('phone')->nullable(); 
+            $table->string('email', 100)->nullable();
+            $table->string('address', 255)->nullable();
             $table->boolean('state')->default(true);
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -33,6 +34,6 @@ class Products extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('collectors');
     }
 }

@@ -3,6 +3,8 @@ require('./sweetalert');
 require('./validatePsw');
 require('./formInventary');
 require('./dashboard');
+require('./countrys');
+require('./editForms');
 
 import Swal from 'sweetalert2';
 
@@ -115,74 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    window.mostrarFormulario = function (btn) {
-        const formularioId = btn.getAttribute('data-form');
-        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId'];
-
-        // Ocultar todos los formularios
-        document.querySelectorAll('.formulario').forEach(f => f.style.display = 'none');
-
-        // Mostrar el formulario correspondiente
-        document.getElementById(formularioId).style.display = 'block';
-
-        for (const type of dataTypes) {
-            if (btn.dataset[type]) {
-                const data = JSON.parse(btn.dataset[type]);
-
-                const fillMap = {
-                    menuId: {
-                        'menu_id': 'id',
-                        'name_menu_e': 'name',
-                        'slug_menu_e': 'slug'
-                    },
-                    itemId: {
-                        'item_id': 'id',
-                        'name_item_e': 'name',
-                        'route_e': 'route',
-                        'main_menu_e': 'main'
-                    },
-                    prodId: {
-                        'id_product': 'id',
-                        'name_prod_e': 'name',
-                        'slug_product_e': 'slug',
-                        'price_product_sale_e': 'price_sale',
-                        'price_product_purch_e': 'price_purch',
-                        'state_product_e': 'state'
-                    },
-                    userId: {
-                        'user_id': 'id',
-                        'username_e': 'username'
-                    },
-                    clientId: {
-                        'id_client': 'id',
-                        'name_client_e': 'name',
-                        'nit_client_e': 'nit',
-                        'phn_client_e': 'phone',
-                        'email_client_e': 'email',
-                        'address_e': 'address',
-                        'state_client_e': 'state'
-                    }
-                };
-
-                const fields = fillMap[type];
-                for (const [fieldName, dataKey] of Object.entries(fields)) {
-                    const field = document.querySelector(`[name="${fieldName}"]`);
-                    if (field) {
-                        if (fieldName === 'state_product_e' || fieldName === 'state_client_e') {
-                            field.checked = data[dataKey] == 1;
-                        } else {
-                            field.value = data[dataKey] ?? '';
-                        }
-                    }
-                }
-
-                break;
-            }
-        }
-    };
-
-
-
     function ajustarSidebarTop() {
         const navbar = document.querySelector('.navbar');
         const sidebar = document.querySelector('.sidebar');
@@ -199,17 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    
+    document.querySelectorAll('.numeric-comma').forEach(input => {
+        input.addEventListener('input', function () {
+            // Reemplaza punto por coma en la visualización
+            this.value = this.value
+                .replace(/[^\d.,]/g, '')         // Elimina todo lo que no sea número, punto o coma
+                .replace(/\./g, ',');            // Reemplaza puntos por comas
+        });
 
-
-
-
-
-
-
-
-
-
-
+        input.addEventListener('blur', function () {
+            // Si se usa para cálculos internos, puedes convertirlo a número real aquí si necesitas
+            const valor = this.value.replace(',', '.');
+            if (!isNaN(valor)) {
+                this.dataset.realValue = parseFloat(valor); // Por si necesitas el valor como número real
+            }
+        });
+    });
 
 });

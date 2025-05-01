@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PositionsAreasRolesSeeder::class);
         $this->call(UserLoginAdmin::class);
         $this->call(MenusItems::class);
-        $this->call(clients::class);
         $this->call(products::class);
+        $this->call(DocumentTypesSeeder::class);
     }
 }

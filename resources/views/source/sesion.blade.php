@@ -27,13 +27,13 @@
             </div>
             <!-- Email input -->
             <div data-mdb-input-init class="form-outline mb-3">
-                <input type="username" id="username" name="username" class="form-control" value="admin" required>
+                <input type="username" id="username" name="username" class="form-control" value="adminRc" required>
                 <label class="form-label" for="form3Example3">Usuario</label>
             </div>
 
             <!-- Password input -->
             <div data-mdb-input-init class="form-outline mb-3">
-                <input type="password" id="password" name="password" class="form-control" value="admin123" required>
+                <input type="password" id="password" name="password" class="form-control" value="AdminRecycore1901" required>
                 <label class="form-label" for="form3Example4">Contraseña</label>
             </div>
 

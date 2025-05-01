@@ -21,7 +21,8 @@ class MenusItems extends Seeder
                 'items' => [
                     ['name' => 'Empleados', 'route' => 'employeesList'],
                     ['name' => 'Productos',   'route' => 'productList'],
-                    ['name' => 'Clientes', 'route' => 'clientList']
+                    ['name' => 'Fuentes', 'route' => 'clientList'],
+                    ['name' => 'Recolecores', 'route' => 'collectorList'],
                 ],
             ],
             [

@@ -16,10 +16,11 @@ class products extends Seeder
     {
         DB::table('products')->insert([
             [
-                'product_name' => 'Papel',
+                'product_name' => 'Archivo Revuelto',
                 'slug_product' => 'PL',
                 'price_product_sale' => 650,
-                'price_product_purch' => 350,
+                'price_product_purch_f' => 250,
+                'price_product_purch_c' => 350,
                 'state' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -28,7 +29,8 @@ class products extends Seeder
                 'product_name' => 'Plastico',
                 'slug_product' => 'PLS',
                 'price_product_sale' => 750,
-                'price_product_purch' => 500,
+                'price_product_purch_f' => 450,
+                'price_product_purch_c' => 500,
                 'state' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -37,7 +39,8 @@ class products extends Seeder
                 'product_name' => 'PET',
                 'slug_product' => 'PT',
                 'price_product_sale' => 850,
-                'price_product_purch' => 400,
+                'price_product_purch_f' => 320,
+                'price_product_purch_c' => 400,
                 'state' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),

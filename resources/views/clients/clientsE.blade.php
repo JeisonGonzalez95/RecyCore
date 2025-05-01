@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
-                    <h2 class="fw-bold mb-0">Editar Cliente</h2>
+                    <h2 class="fw-bold mb-0">Editar Fuente</h2>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                 <input type="hidden" name="id_client">
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <label for="nombre">Nombre del cliente:</label>
+                        <label for="nombre">Nombre de la fuente:</label>
                         <input class="form-control" type="text" name="name_client_e" id="name_client_e" placeholder="Razon Social" required>
                     </div>
                     <div class="col-md-4">
@@ -53,7 +53,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <button class="btn btn-success w-100" type="submit">Editar Cliente</button>
+                        <button class="btn btn-success w-100" type="submit">Editar Fuente</button>
                     </div>
                 </div>
             </form>

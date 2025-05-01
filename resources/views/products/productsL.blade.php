@@ -21,6 +21,7 @@
                             <th>Sigla</th>
                             <th>Precio de venta</th>
                             <th>Precio de compra</th>
+                            <th>Precio de compra (fuente)</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -32,7 +33,8 @@
                             <td>{{ $product->product_name }}</td>
                             <td>{{ $product->slug_product }}</td>
                             <td>${{ round($product->price_product_sale) }}</td>
-                            <td>${{ round($product->price_product_purch) }}</td>
+                            <td>${{ round($product->price_product_purch_c) }}</td>
+                            <td>${{ round($product->price_product_purch_f) }}</td>
                             <td>{{ $product->state == 1 ? 'Activo' : 'Inactivo' }}</td>
                             @php
                             $dataProd = [
@@ -48,9 +50,6 @@
                                 <button type="button" class="btn btn-link text-warning me-3 p-0" title="Editar" popovertarget="prodE" popovertargetaction="show" data-form="formProdE" data-prod-id='@json($dataProd)' onclick="mostrarFormulario(this)">
                                     <i class="fa-solid fa-pen"></i>Editar
                                 </button>
-                                <!-- <a href="javascript:void(0);" class="text-danger btn-delete" data-url="{{ route('delete_pos', $product->id) }}" title="Eliminar">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a> -->
                             </td>
                         </tr>
                         @endforeach

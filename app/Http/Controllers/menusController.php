@@ -23,7 +23,7 @@ class menusController extends Controller
             ->select(
                 'products.product_name',
                 DB::raw('SUM(products_moviments.amount_kg) as total_kg'),
-                DB::raw('SUM(products_moviments.amount_kg * products_moviments.price_product) as total_cost')
+                DB::raw('SUM(products_moviments.amount_kg * products.price_product_sale) as total_cost')
             )
             ->groupBy('products.product_name')
             ->get();
