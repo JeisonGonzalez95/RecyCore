@@ -102,12 +102,19 @@ class invetaryController extends Controller
             ]);
         }
 
-        return redirect()->route('inventaryI')->with('alerta', [
-            'titulo' => '¡Éxito!',
-            'mensaje' => 'Movimiento N° ' . $movId . ' agregado correctamente.',
-            'icono' => 'success',
-            'confirmarTexto' => 'Entendido',
-            'mostrarCancelar' => false
+        // Agregar un mensaje para el toast de éxito
+        return redirect()->route('inventaryI')->with([
+            'alerta' => [
+                'titulo' => '¡Éxito!',
+                'mensaje' => 'Movimiento N° ' . $movId . ' agregado correctamente.',
+                'icono' => 'success',
+                'confirmarTexto' => 'Entendido',
+                'mostrarCancelar' => false
+            ],
+            'stock_alert' => '
+                Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
+                Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
+                Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
         ]);
     }
 
