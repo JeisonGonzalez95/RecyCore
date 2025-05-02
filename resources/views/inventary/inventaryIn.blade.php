@@ -24,7 +24,8 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table id="tablaEmpleados" class="table table-striped table-hover table-bordered text-center align-middle">
+                    <table id="tablaEmpleados"
+                        class="table table-striped table-hover table-bordered text-center align-middle">
                         <thead class="table-primary">
                             <tr>
                                 <th>Mov N°</th>
@@ -42,24 +43,27 @@
                                 <tr onclick="window.location='{{ route('descInvIn', ['id' => $moviment->id]) }}';"
                                     style="cursor:pointer;">
                                     <td>{{ $moviment->id }}</td>
-                                    <td>{{ $moviment->name_client }}</td>
+                                    <td>{{ $moviment->client_data->name ?? 'Sin cliente' }}</td>
                                     <td style="white-space: nowrap;">
                                         <ul class="text-start m-0 p-0" style="list-style-position: inside;">
                                             @foreach ($moviment->products as $product)
                                                 <li style="line-height: 1.2;">
-                                                    {{ $product->product->product_name ?? 'Producto desconocido' }} ({{ $product->amount_kg }}Kg)
+                                                    {{ $product->product->product_name ?? 'Producto desconocido' }}
+                                                    ({{ number_format(floatval(str_replace(',', '.', $product->amount_kg)) - floatval(str_replace(',', '.', $product->amount_dev_kg)), 2, ',', '') }}
+                                                    Kg)
                                                 </li>
                                             @endforeach
-                                        </ul>                                        
+                                        </ul>
                                     </td>
                                     <td>${{ number_format($moviment->products->sum('price_product')) }}</td>
                                     <td>{{ $moviment->description ?? 'Sin descripción' }}</td>
                                     <td>{{ $moviment->date_in }}</td>
                                     <td>{{ $moviment->employee->fullname ?? 'Sin usuario' }}</td>
-                                    <td> 
-                                        {{-- <a href="{{ route('descFac', ['id' => $moviment->id ])}}" class="btn btn-outline-secondary" title="Imprimir factura">
+                                    <td>
+                                        <a href="{{ route('descFac', ['id' => $moviment->id]) }}"
+                                            class="btn btn-outline-secondary" title="Imprimir factura">
                                             <i class="fa-solid fa-print"></i>
-                                        </a> --}}
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

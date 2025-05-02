@@ -1,1 +1,328 @@
-body{align-items:center;background:#fff;display:auto;flex-direction:column;height:100vh;justify-content:center;margin:0}.footer{bottom:0;color:#160d49;opacity:10%;position:fixed;text-align:right;text-shadow:1px 1px 1px #fff;width:97%}.bg-glass{-webkit-backdrop-filter:saturate(200%) blur(25px);backdrop-filter:saturate(200%) blur(25px);background-color:hsla(0,0%,100%,.9)!important}.welcome{z-index:10}.titulo{color:#e8effd}.parrafo{color:#bad0f8;opacity:70%}.txt-smll{font-size:12px;font-weight:700;margin-right:10px;margin-top:20px}.img-logo-s,.sidebar{width:200px}.sidebar{background:#142434;box-shadow:2px 0 5px rgba(0,0,0,.1);height:100vh;left:0;padding-top:20px;position:fixed;transform:translateX(0);transition:transform .3s ease-in-out;z-index:1000}.sidebar.hidden{transform:translateX(-100%)}.sidebar .menu-item{color:#fff;display:block;font-size:18px;padding:15px;text-decoration:none;transition:background .3s}.sidebar .menu-item:hover{background:#2c4464}.sidebar .menu-item.active{background:#2c4464;border-bottom-right-radius:20px;border-top-right-radius:20px;box-shadow:inset 2px 0 0 hsla(0,0%,100%,.1);color:#fff;font-weight:700;padding-left:20px}.sidebar-section.hidden{display:none}.menu-toggle{background:#6d0ca4;border:none;box-shadow:2px 2px 5px rgba(0,0,0,.2);color:#fff;cursor:pointer;left:100%;padding:10px;position:absolute;top:0;transition:background .3s}.menu-toggle:hover{background:#2c4464;color:#fff}.menu-item.dropdown:after{content:" ▼";font-size:14px}.content-wrapper{margin-left:15vh;transition:margin-left .3s ease-in-out,width .3s ease-in-out;width:100vh}.navbar{background:#fff!important;box-shadow:0 2px 5px rgba(0,0,0,.1);padding-bottom:.01rem!important;padding-top:.01rem!important;position:fixed!important;top:0;width:100%;z-index:1050}body.no-animate .menu-superior a,body.no-animate .menu-superior a:after{transition:none!important}.menu-superior{display:flex;gap:24px;justify-content:center;transition:all .3s ease-in-out;width:-moz-fit-content;width:fit-content}.menu-superior a{border-radius:12px;color:#1f2937;font-size:15px;font-weight:500;padding:12px 20px;position:relative;text-decoration:none;transition:all .3s ease-in-out}.menu-superior a:after{background:#3b82f6;bottom:4px;content:"";height:2px;left:0;position:absolute;transform:scaleX(0);transform-origin:right;transition:transform .3s ease-in-out;width:100%}.menu-superior a:hover:after{transform:scaleX(1);transform-origin:left}.menu-superior a.active,.menu-superior a:hover{color:#3b82f6}.menu-superior a.active:after{transform:scaleX(1);transform-origin:left}#fac,#inv,#sis,[popover]{display:none}[popover]{align-items:center;background-color:rgba(0,0,0,.5);height:100vh;inset:0;justify-content:center;padding:1rem;position:fixed;width:100vw;z-index:1055}[popover]:popover-open{animation:fadeIn .1s ease-in-out;display:flex}[popover] .modal-content{animation:slideUp .3s ease-in-out;background-color:#fff;border-radius:1rem;box-shadow:0 .5rem 1rem rgba(0,0,0,.15);max-width:800px;width:100%}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes slideUp{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.container-white{background-color:#fff;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,.05);margin:0 auto;max-width:100%;padding:20px;width:100%}.container-white-1{max-width:400px}.container-white-2{max-width:600px}.container-white-3{max-width:800px}.container-white-4{max-width:1000px}.container-white .row{align-items:center;display:flex;justify-content:center;text-align:center}.button-plus{background-color:#28a745;border-radius:50%;box-shadow:0 4px 8px rgba(0,0,0,.1);display:inline-block;padding:2px;text-align:center;transition:all .3s ease}.button-plus a{color:#fff;display:inline-block;font-size:36px;line-height:0;text-decoration:none}.button-plus:hover{background-color:#218838;box-shadow:0 6px 12px rgba(0,0,0,.2);transform:translateY(-3px)}.button-plus:active{box-shadow:0 2px 4px rgba(0,0,0,.1);transform:translateY(1px)}.prod{color:grey;display:flex;font-size:12px;font-weight:700;justify-content:flex-end}
+body {
+    display: auto;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background: white;
+}
+
+.footer {
+    text-align: right;
+    color: rgb(22, 13, 73);
+    text-shadow: 1px 1px 1px white;
+    position: fixed;
+    bottom: 0;
+    width: 97%;
+    opacity: 10%;
+}
+
+
+.bg-glass {
+    background-color: hsla(0, 0%, 100%, 0.9) !important;
+    -webkit-backdrop-filter: saturate(200%) blur(25px);
+            backdrop-filter: saturate(200%) blur(25px);
+}
+
+.welcome {
+    z-index: 10;
+}
+
+.titulo {
+    color: hsl(218, 81%, 95%);
+}
+
+.parrafo {
+    color: hsl(218, 81%, 85%);
+    opacity: 70%;
+}
+
+.txt-smll {
+    font-size: 12px;
+    margin-right: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.img-logo-s {
+    width: 200px;
+}
+
+
+/* Estilos para el menú lateral */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    background: #142434;
+    padding-top: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar .menu-item {
+    display: block;
+    padding: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+
+.sidebar .menu-item:hover {
+    background: #2c4464;
+}
+
+.sidebar .menu-item.active {
+    background: #2c4464;
+    color: #ffffff;
+    font-weight: bold;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-left: 20px;
+    box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-section.hidden {
+    display: none;
+}
+
+
+.menu-toggle {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #6d0ca4;
+    border: none;
+    color: #ffffff;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-toggle:hover {
+    background: #2c4464;
+    color: #fff;
+}
+
+.menu-item.dropdown::after {
+    content: " ▼";
+    font-size: 14px;
+}
+
+.content-wrapper {
+    margin-left: 15vh;
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    width: 100vh;
+}
+
+
+.navbar {
+    position: fixed !important;
+    padding-top: 0.01rem !important;
+    padding-bottom: 0.01rem !important;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+    background: #ffffff !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Procesos para gestion de inventarios */
+
+
+body.no-animate .menu-superior a,
+body.no-animate .menu-superior a::after {
+    transition: none !important;
+}
+
+.menu-superior {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    width: -moz-fit-content;
+    width: fit-content;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-superior a {
+    text-decoration: none;
+    padding: 12px 20px;
+    color: #1f2937;
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+.menu-superior a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    width: 100%;
+    height: 2px;
+    background: #3b82f6;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+}
+
+.menu-superior a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.menu-superior a:hover {
+    color: #3b82f6;
+}
+
+.menu-superior a.active {
+    color: #3b82f6;
+}
+
+.menu-superior a.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+#fac,
+#inv,
+#sis {
+    display: none;
+}
+
+
+
+[popover] {
+    position: fixed;
+    inset: 0;
+    /* top: 0; right: 0; bottom: 0; left: 0 */
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* fondo opaco */
+    z-index: 1055;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Cuando se abre el popover */
+[popover]:popover-open {
+    display: flex;
+    animation: fadeIn 0.1s ease-in-out;
+}
+
+/* Contenido del modal */
+[popover] .modal-content {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    width: 100%;
+    animation: slideUp 0.3s ease-in-out;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+
+/* Centrar el contenedor principal */
+.container-white {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
+/* Variantes de tamaño */
+.container-white-1 { max-width: 400px; }
+.container-white-2 { max-width: 600px; }
+.container-white-3 { max-width: 800px; }
+.container-white-4 { max-width: 1000px; }
+
+/* Centrar el contenido dentro del contenedor */
+.container-white .row {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente si es necesario */
+    text-align: center; /* Opcional: para centrar el texto dentro de los elementos */
+}
+
+
+
+.button-plus {
+    display: inline-block;
+    padding: 2px; /* Aumentar el padding para que el botón sea más grande */
+    background-color: #28a745; /* Color verde elegante */
+    border-radius: 50%; /* Hacer el botón redondo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: all 0.3s ease; /* Transición suave para efectos de hover */
+    text-align: center; /* Asegurar que el icono se centre dentro del botón */
+}
+
+.button-plus a {
+    color: #ffffff; /* Color del icono */
+    font-size: 36px; /* Tamaño del icono más grande */
+    text-decoration: none; /* Eliminar subrayado */
+    display: inline-block;
+    line-height: 0; /* Eliminar cualquier espacio adicional alrededor del icono */
+}
+
+.button-plus:hover {
+    background-color: #218838; /* Color de fondo más oscuro en hover */
+    transform: translateY(-3px); /* Efecto de elevación en hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más fuerte en hover */
+}
+
+.button-plus:active {
+    transform: translateY(1px); /* Efecto de "presionar" cuando se hace clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera cuando se hace clic */
+}
+
+.prod {
+    display: flex;
+    justify-content: flex-end; /* alinea el texto a la derecha */
+    font-size: 12px;
+    color: grey;
+    font-weight: bold;
+}
+

@@ -1,1 +1,83 @@
-.background-radial-gradient{background-color:#172236;background-image:radial-gradient(650px circle at 0 0,#354f7e 15%,#2d446c 35%,#1e2d48 75%,#1d2b44 80%,transparent 100%),radial-gradient(1250px circle at 100% 100%,#4466a2 15%,#2d446c 35%,#1e2d48 75%,#1d2b44 80%,transparent 100%);background-position:50%;background-size:cover;min-height:100vh;width:100%}#radius-shape-1{height:20vw;left:calc(10% - 130px);max-height:220px;max-width:220px;top:calc(10% - 60px);width:20vw}#radius-shape-1,#radius-shape-2{background:radial-gradient(#44006b,#ad1fff);overflow:hidden;position:absolute;transition:all .5s ease-in-out}#radius-shape-2{border-radius:38% 62% 63% 37%/70% 33% 67% 30%;bottom:calc(10% - 60px);height:27vw;max-height:300px;max-width:300px;right:calc(10% - 110px);width:27vw}@media (max-width:768px){#radius-shape-1{height:18vw;left:calc(5% - 50px);top:calc(5% - 30px);width:18vw}#radius-shape-2{bottom:calc(5% - 30px);height:25vw;right:calc(5% - 50px);width:25vw}}@media (max-width:480px){#radius-shape-1{height:15vw;left:5%;top:5%;width:15vw}#radius-shape-2{bottom:5%;height:20vw;right:5%;width:20vw}}
+.background-radial-gradient {
+    min-height: 100vh;
+    width: 100%;
+    background-color: hsl(218, 41%, 15%);
+    background-image:
+        radial-gradient(650px circle at 0% 0%,
+            hsl(218, 41%, 35%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%),
+        radial-gradient(1250px circle at 100% 100%,
+            hsl(218, 41%, 45%) 15%,
+            hsl(218, 41%, 30%) 35%,
+            hsl(218, 41%, 20%) 75%,
+            hsl(218, 41%, 19%) 80%,
+            transparent 100%);
+    background-size: cover;
+    background-position: center;
+}
+
+
+
+#radius-shape-1 {
+    position: absolute;
+    height: 20vw;
+    width: 20vw;
+    max-width: 220px;
+    max-height: 220px;
+    top: calc(10% - 60px);
+    left: calc(10% - 130px);
+    background: radial-gradient(#44006b, #ad1fff);
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+#radius-shape-2 {
+    position: absolute;
+    border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+    width: 27vw;
+    height: 27vw;
+    max-width: 300px;
+    max-height: 300px;
+    bottom: calc(10% - 60px);
+    right: calc(10% - 110px);
+    background: radial-gradient(#44006b, #ad1fff);
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+
+@media (max-width: 768px) {
+    #radius-shape-1 {
+        height: 18vw;
+        width: 18vw;
+        top: calc(5% - 30px);
+        left: calc(5% - 50px);
+    }
+
+    #radius-shape-2 {
+        width: 25vw;
+        height: 25vw;
+        bottom: calc(5% - 30px);
+        right: calc(5% - 50px);
+    }
+}
+
+
+@media (max-width: 480px) {
+    #radius-shape-1 {
+        height: 15vw;
+        width: 15vw;
+        top: 5%;
+        left: 5%;
+    }
+
+    #radius-shape-2 {
+        width: 20vw;
+        height: 20vw;
+        bottom: 5%;
+        right: 5%;
+    }
+}

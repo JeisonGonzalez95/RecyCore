@@ -32,7 +32,7 @@ class PositionsAreasRolesSeeder extends Seeder
         // Insertar áreas
         $areas = [
             'Gerencia',
-            'Marketing y estrategias',
+            'Finanzas',
             'Logistica',
             'Desarrollo',
             'Comercial'

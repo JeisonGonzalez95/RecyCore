@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/addMoviment', [invetaryController::class, 'regMovimentsIn'])->name('addMoviment');
     Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
     Route::get('/descInvIn/{id}', [invetaryController::class, 'descInventaryIn'])->name('descInvIn');
-    Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac'); 
+    Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac');
 
 
     // Inventarios Salida
@@ -73,40 +73,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/collectorE', [collectorsController::class, 'editCollector'])->name('collectorsE');
 
 
-    Route::get('/remision-prueba', function () {
-
-        $path = public_path('images/logorz.png');
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-
-        $fecha = '2025-05-01';
-        $carbon = Carbon::parse($fecha);
-        $data = [
-            'dia' => $carbon->format('d'),
-            'mes' => $carbon->format('m'),
-            'año' => $carbon->format('Y'),
-            'numero_remision' => 'ARP-02',
-            'cliente_nombre' => 'AURORA PLASTICS RECYCLING SAS',
-            'cliente_nit' => '901.391.906-2',
-            'cliente_direccion' => 'CL 12 # 38-83',
-            'cliente_telefono' => '3215403703',
-            'telefono_cc' => '3150062121 - 1018433374',
-            'materiales' => [
-                ['detalle' => 'GLOBOS PET CRISTAL', 'cantidad' => '570.5'],
-                ['detalle' => 'GLOBO ACEITE', 'cantidad' => '11.5'],
-                ['detalle' => 'GLOBO PET VERDE', 'cantidad' => '20'],
-            ],
-            'conductor' => 'DANIEL CAICEDO',
-            'tel' => '',
-            'cc' => '',
-            'placa' => 'ALA954',
-            'diligenciador' => 'LIZETH VERA',
-            'observaciones' => '',
-            'imagen' => $base64
-        ];
-
-        $pdf = Pdf::loadView('inventary.pdfRP', $data);
-        return $pdf->stream('remision-prueba.pdf');
-    });
 });

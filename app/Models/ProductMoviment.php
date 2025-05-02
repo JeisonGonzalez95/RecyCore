@@ -11,7 +11,7 @@ class ProductMoviment extends Model
 
     protected $table = 'products_moviments';
 
-    protected $fillable = ['id_moviment_in', 'id_moviment_out', 'id_product', 'amount_kg', 'price_product'];
+    protected $fillable = ['id_moviment_in', 'id_moviment_out', 'id_product', 'amount_kg', 'amount_dev_kg', 'price_product'];
 
     public function product()
     {

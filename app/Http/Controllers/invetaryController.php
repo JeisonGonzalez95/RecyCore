@@ -9,6 +9,7 @@ use App\Models\MovimentsOut;
 use App\Models\product;
 use App\Models\ProductMoviment;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class invetaryController extends Controller
@@ -21,11 +22,12 @@ class invetaryController extends Controller
 
     public function inventaryInList()
     {
-        $moviments = MovimentsIn::with(['products.product', 'employee'])->where('description', '<>', 'Temporal')->get();
+        $moviments = MovimentsIn::with(['products.product', 'employee'])
+            ->where('description', '<>', 'Temporal')
+            ->get();
 
         return view('inventary.inventaryIn', compact('moviments'));
     }
-
 
     public function inventaryOutList()
     {
@@ -48,6 +50,7 @@ class invetaryController extends Controller
         $employeeId = auth()->id();
 
         $idIn = MovimentsIn::create([
+            'type_client' => $tp,
             'employee_id' => $employeeId,
             'date_in' => now(),
             'description' => 'Temporal'
@@ -73,25 +76,28 @@ class invetaryController extends Controller
 
         $products = $request->input('product');
         $amounts = $request->input('amount');
+        $devs = $request->input('amountDev');
         $prices = $request->input('price');
 
         $movId = $request->movId;
         $movUpd = MovimentsIn::findOrFail($movId);
 
         $movUpd->update([
-            'name_client' => $request->client,
+            'id_client' => $request->client,
             'description' => $request->description,
             'updated_at' => now()
         ]);
 
         foreach ($products as $index => $productId) {
             $amount = str_replace(',', '.', $amounts[$index]);
+            $amountDev = isset($devs[$index]) ? str_replace(',', '.', $devs[$index]) : 0;
             $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
 
             ProductMoviment::create([
                 'id_moviment_in' => $movId,
                 'id_product' => $productId,
                 'amount_kg' => floatval($amount),
+                'amount_dev_kg' => floatval($amountDev),
                 'price_product' => $price !== null ? floatval($price) : null
             ]);
         }
@@ -120,14 +126,39 @@ class invetaryController extends Controller
     {
         $moviment = MovimentsIn::with('products.product')->findOrFail($id);
 
-        $client = Client::where('name', $moviment->name_client)->first();
-        $isClient = $client ? 1 : 0;
+        // Obtener el cliente relacionado
+        $clientData = $moviment->client_data;
 
-        $pdf = Pdf::loadView('inventary.pdf', [
-            'moviment' => $moviment,
-            'isClient' => $isClient,
-            'client' => $client
-        ]);
+        // Fecha con Carbon
+        $fecha = $moviment->created_at;
+        $carbon = Carbon::parse($fecha);
+        $data = [
+            'dia' => $carbon->format('d'),
+            'mes' => $carbon->format('m'),
+            'año' => $carbon->format('Y'),
+            'numero_remision' => 'ARP-' . str_pad($moviment->id, 2, '0', STR_PAD_LEFT),
+            'cliente_nombre' => $clientData?->name ?? 'N/A',
+            'cliente_nit' => $clientData && $moviment->type_client == 2 ? $clientData->nit : ($clientData && $moviment->type_client == 1 ? $clientData->dni : 'N/A'),
+            'cliente_direccion' => $clientData?->address ?? 'N/A',
+            'cliente_telefono' => $clientData?->phone ?? 'N/A',
+            'telefono_cc' => '3150062121 - 1018433374',
+            'materiales' => $moviment->products->map(function ($product) {
+                return [
+                    'detalle' => $product->product->product_name,
+                    'cantidad' => floatval(str_replace(',', '.', $product->amount_kg)) - floatval(str_replace(',', '.', $product->amount_dev_kg)),
+                ];
+            }),
+            'conductor' => 'DANIEL CAICEDO',
+            'tel' => '29920309',
+            'cc' => '1233223323',
+            'placa' => 'ALA954',
+            'diligenciador' => 'LIZETH VERA',
+            'observaciones' => '',
+            'imagen' => 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/logorz.png'))),
+        ];
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('inventary.pdfRP', $data);
 
         return $pdf->download("FCT_00000{$moviment->id}.pdf");
     }

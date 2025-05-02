@@ -36,7 +36,6 @@
     </div>
 </nav>
 
-{{-- Pasar slugs al frontend usando data-* seguro --}}
 <div id="menu-data" data-slugs="{{ htmlspecialchars(json_encode($menus->pluck('slug_menu')), ENT_QUOTES, 'UTF-8') }}"></div>
 
 <div class="sidebar" id="sidebar">

@@ -1,19 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Función para verificar si un elemento está visible
+    function isVisible(el) {
+        return el && el.offsetParent !== null;
+    }
+
     // Función para actualizar el precio
     function updatePrice(row) {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
+        const amountDevInput = row.querySelector('input[name="amountDev[]"]');
         const priceInput = row.querySelector('input[name="price[]"]');
 
         const selectedOption = productSelect.options[productSelect.selectedIndex];
         const unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
 
-        // Reemplazo interno para cálculo
-        const amountRaw = amountInput.value.replace(',', '.');
-        const amount = parseFloat(amountRaw) || 0;
+        const amount = parseFloat((amountInput.value || '0').replace(',', '.')) || 0;
+        let amountDev = 0;
 
-        const total = unitPrice * amount;
+        if (amountDevInput && isVisible(amountDevInput)) {
+            amountDev = parseFloat((amountDevInput.value || '0').replace(',', '.')) || 0;
+        }
+
+        const netAmount = Math.max(0, amount - amountDev);
+        const total = unitPrice * netAmount;
         priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
     }
 
@@ -21,12 +31,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function bindEventsToRow(row) {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
+        const amountDevInput = row.querySelector('input[name="amountDev[]"]');
 
-        // Convertir punto a coma en el input visible del usuario
         amountInput.addEventListener('input', () => {
             amountInput.value = amountInput.value.replace('.', ',');
-            updatePrice(row); // Calcular con coma convertida a punto internamente
+            updatePrice(row);
         });
+
+        if (amountDevInput) {
+            amountDevInput.addEventListener('input', () => {
+                amountDevInput.value = amountDevInput.value.replace('.', ',');
+                updatePrice(row);
+            });
+        }
 
         productSelect.addEventListener('change', () => updatePrice(row));
     }
@@ -48,11 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
         deleteButton.removeAttribute('disabled');
         deleteButton.addEventListener('click', function (e) {
             e.preventDefault();
-            newProductRow.remove(); 
+            newProductRow.remove();
         });
 
         document.querySelector('.product-container').appendChild(newProductRow);
-        bindEventsToRow(newProductRow); // Asocia los eventos a la nueva fila
+        bindEventsToRow(newProductRow);
     });
 
     // Evento para eliminar un producto

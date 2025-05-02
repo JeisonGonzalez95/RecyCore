@@ -10,7 +10,8 @@ class Invetaries extends Migration
     {
         Schema::create('moviments_in', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('name_client')->nullable();
+            $table->tinyInteger('type_client');
+            $table->unsignedInteger('id_client')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->date('date_in');
             $table->text('description')->nullable();
@@ -19,7 +20,8 @@ class Invetaries extends Migration
 
         Schema::create('moviments_out', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('name_client')->nullable();
+            $table->tinyInteger('type_client');
+            $table->unsignedInteger('id_client')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->date('date_out');
             $table->text('description')->nullable();
@@ -32,6 +34,7 @@ class Invetaries extends Migration
             $table->foreignId('id_moviment_out')->nullable()->constrained('moviments_out')->onDelete('cascade');
             $table->foreignId('id_product')->constrained('products')->onDelete('cascade');
             $table->decimal('amount_kg', 10, 2);
+            $table->decimal('amount_dev_kg', 10, 2)->nullable();
             $table->unsignedBigInteger('price_product');
             $table->timestamps();
         });
