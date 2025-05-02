@@ -57,9 +57,9 @@
                                     <td>{{ $moviment->date_in }}</td>
                                     <td>{{ $moviment->employee->fullname ?? 'Sin usuario' }}</td>
                                     <td> 
-                                        <a href="{{ route('descFac', ['id' => $moviment->id ])}}" class="btn btn-outline-secondary" title="Imprimir factura">
+                                        {{-- <a href="{{ route('descFac', ['id' => $moviment->id ])}}" class="btn btn-outline-secondary" title="Imprimir factura">
                                             <i class="fa-solid fa-print"></i>
-                                        </a>
+                                        </a> --}}
                                     </td>
                                 </tr>
                             @endforeach

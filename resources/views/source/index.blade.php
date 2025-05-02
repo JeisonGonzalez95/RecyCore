@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('index') }}">
-            <img class="img-logo" src="{{ asset('images/recycore.png') }}" alt="Logo PsicoAlianza">
+            <img src="{{ asset('images/recycorerz.webp') }}">
         </a>
 
         <div class="menu-superior">

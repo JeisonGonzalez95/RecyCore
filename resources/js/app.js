@@ -1,12 +1,14 @@
+const isRoute = path => window.location.pathname.includes(path);
+
 require('./bootstrap');
 require('./sweetalert');
-require('./validatePsw');
-require('./formInventary');
-require('./dashboard');
-require('./countrys');
 require('./editForms');
 
-import Swal from 'sweetalert2';
+if (isRoute('/inventaryIf')) require('./formInventary');
+if (isRoute('/index')) require('./dashboard');
+if (isRoute('/collectorList')) require('./countrys');
+if (isRoute('/registerEc') || isRoute('/employees')) require('./validatePsw');
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------
     $('#tablaEmpleados').DataTable({
         language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
         }
     });
 
@@ -24,10 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (horaEl) horaEl.innerText = ahora;
     }
 
-    // Mostrar hora inmediatamente al cargar
     actualizarHora();
-
-    // Actualizar cada segundo
     setInterval(actualizarHora, 60000);
 
     // -------------------------------
@@ -88,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let rutaActual = rutaGuardada;
 
-    // Si no hay ruta en localStorage, usar "Inicio" como predeterminada
     if (!rutaActual) {
         const linkInicio = Array.from(sidebarLinks).find(link =>
             link.href === location.origin + '/' || link.href === location.origin + '/index'
@@ -127,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Ejecutar al cargar y al redimensionar la ventana
     window.addEventListener('load', ajustarSidebarTop);
     window.addEventListener('resize', ajustarSidebarTop);
 
@@ -135,17 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.numeric-comma').forEach(input => {
         input.addEventListener('input', function () {
-            // Reemplaza punto por coma en la visualización
             this.value = this.value
-                .replace(/[^\d.,]/g, '')         // Elimina todo lo que no sea número, punto o coma
-                .replace(/\./g, ',');            // Reemplaza puntos por comas
+                .replace(/[^\d.,]/g, '')
+                .replace(/\./g, ',');
         });
 
         input.addEventListener('blur', function () {
-            // Si se usa para cálculos internos, puedes convertirlo a número real aquí si necesitas
             const valor = this.value.replace(',', '.');
             if (!isNaN(valor)) {
-                this.dataset.realValue = parseFloat(valor); // Por si necesitas el valor como número real
+                this.dataset.realValue = parseFloat(valor);
             }
         });
     });
