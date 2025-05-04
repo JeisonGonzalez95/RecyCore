@@ -14,7 +14,7 @@
                     <i class="fas fa-cubes fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
                     <span class="h3 fw-bold mb-0">Registrar Entrada - {{ $tipo }}</span>
                 </div>
-                <form id="register" autocomplete="off" action="{{ route('addMoviment') }}" method="POST">
+                <form id="register" autocomplete="off" action="{{ route('addMovimentIn') }}" method="POST">
                     @csrf
                     <input type="hidden" name="movId" value="{{ $lastId }}">
                     <div class="container-white mb-4">
@@ -116,6 +116,7 @@
                         <form action="{{ route('delMov') }}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{ $lastId }}">
+                            <input type="hidden" name="type" value="1">
                             <button class="btn btn-danger w-100" type="submit">Volver</button>
                         </form>
                     </div>

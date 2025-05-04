@@ -9,7 +9,6 @@
                         <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
                         <h2 class="fw-bold mb-0">Inventarios - Entradas</h2>
                     </div>
-                    {{-- <a href="{{ route('inventaryIf') }}" class="btn btn-outline-primary"><i class="fa-solid fa-user-plus"></i> Agregar Producto</a> --}}
                     <div class="dropdown">
                         <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -60,7 +59,7 @@
                                     <td>{{ $moviment->date_in }}</td>
                                     <td>{{ $moviment->employee->fullname ?? 'Sin usuario' }}</td>
                                     <td>
-                                        <a href="{{ route('descFac', ['id' => $moviment->id]) }}"
+                                        <a href="{{ route('descFac', ['id' => $moviment->id, 'type' => 2]) }}"
                                             class="btn btn-outline-secondary" title="Imprimir factura">
                                             <i class="fa-solid fa-print"></i>
                                         </a>

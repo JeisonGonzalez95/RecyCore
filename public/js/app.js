@@ -13,7 +13,7 @@ var isRoute = function isRoute(path) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 __webpack_require__(/*! ./sweetalert */ "./resources/js/sweetalert.js");
 __webpack_require__(/*! ./editForms */ "./resources/js/editForms.js");
-if (isRoute('/inventaryIf')) __webpack_require__(/*! ./formInventary */ "./resources/js/formInventary.js");
+if (isRoute('/inventaryIf') || isRoute('/inventaryOf')) __webpack_require__(/*! ./formInventary */ "./resources/js/formInventary.js");
 if (isRoute('/index')) __webpack_require__(/*! ./dashboard */ "./resources/js/dashboard.js");
 if (isRoute('/collectorList')) __webpack_require__(/*! ./countrys */ "./resources/js/countrys.js");
 if (isRoute('/registerEc') || isRoute('/employees')) __webpack_require__(/*! ./validatePsw */ "./resources/js/validatePsw.js");
@@ -302,7 +302,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 document.addEventListener("DOMContentLoaded", function () {
   window.mostrarFormulario = function (btn) {
     var formularioId = btn.getAttribute('data-form');
-    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId'];
+    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId'];
 
     // Ocultar todos los formularios
     document.querySelectorAll('.formulario').forEach(function (f) {
@@ -358,6 +358,15 @@ document.addEventListener("DOMContentLoaded", function () {
             'email_coll_e': 'email',
             'address_e': 'address',
             'state_coll_e': 'state'
+          },
+          providerId: {
+            'id_provider': 'id',
+            'name_provider_e': 'name',
+            'nit_provider_e': 'nit',
+            'phn_provider_e': 'phone',
+            'email_provider_e': 'email',
+            'address_e': 'address',
+            'state_provider_e': 'state'
           }
         };
         var fields = fillMap[type];
@@ -367,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dataKey = _Object$entries$_i[1];
           var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
           if (field) {
-            if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e') {
+            if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e' || fieldName == 'state_provider_e') {
               field.checked = data[dataKey] == 1;
             } else {
               var _data$dataKey;

@@ -8,6 +8,7 @@ use App\Http\Controllers\invetaryController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\menusController;
 use App\Http\Controllers\productsController;
+use App\Http\Controllers\providersController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
@@ -46,15 +47,16 @@ Route::middleware(['auth'])->group(function () {
     // Inventarios Entrada
     Route::get('/inventaryI', [invetaryController::class, 'inventaryInList'])->name('inventaryI');
     Route::get('/inventaryIf/{tp}', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
-    Route::post('/addMoviment', [invetaryController::class, 'regMovimentsIn'])->name('addMoviment');
+    Route::post('/addMovimentIn', [invetaryController::class, 'regMovimentsIn'])->name('addMovimentIn');
     Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
     Route::get('/descInvIn/{id}', [invetaryController::class, 'descInventaryIn'])->name('descInvIn');
     Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac');
-
-
+    
+    
     // Inventarios Salida
     Route::get('/inventaryO', [invetaryController::class, 'inventaryOutList'])->name('inventaryO');
-    Route::post('/inventaryOf', [invetaryController::class, 'inventaryOutAdd'])->name('inventaryOf');
+    Route::get('/inventaryOf', [invetaryController::class, 'inventaryOutAdd'])->name('inventaryOf');
+    Route::post('/addMovimentOut', [invetaryController::class, 'regMovimentsOut'])->name('addMovimentOut');
 
 
     // Productos
@@ -66,11 +68,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clientList', [clientsController::class, 'clientsList'])->name('clientList');
     Route::post('/clientR', [clientsController::class, 'createClient'])->name('clientR');
     Route::post('/clientE', [clientsController::class, 'editClient'])->name('clientE');
-
+    
     // Recolectores
     Route::get('/collectorList', [collectorsController::class, 'collectorsList'])->name('collectorList');
     Route::post('/collectorR', [collectorsController::class, 'createCollector'])->name('collectorR');
     Route::post('/collectorE', [collectorsController::class, 'editCollector'])->name('collectorsE');
+    
+    // Provedores
+    Route::get('/providersList', [providersController::class, 'providersList'])->name('providersList');
+    Route::post('/providerR', [providersController::class, 'createProvider'])->name('providerR');
+    Route::post('/providerE', [providersController::class, 'editProvider'])->name('providerE');
+    
+
 
 
 });

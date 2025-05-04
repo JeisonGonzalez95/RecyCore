@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     window.mostrarFormulario = function (btn) {
         const formularioId = btn.getAttribute('data-form');
-        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId'];
+        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId'];
 
         // Ocultar todos los formularios
         document.querySelectorAll('.formulario').forEach(f => f.style.display = 'none');
@@ -56,14 +56,23 @@ document.addEventListener("DOMContentLoaded", function () {
                         'email_coll_e': 'email',
                         'address_e': 'address',
                         'state_coll_e': 'state'
-                    }
+                    },
+                    providerId: {
+                        'id_provider': 'id',
+                        'name_provider_e': 'name',
+                        'nit_provider_e': 'nit',
+                        'phn_provider_e': 'phone',
+                        'email_provider_e': 'email',
+                        'address_e': 'address',
+                        'state_provider_e': 'state'
+                    },
                 };
 
                 const fields = fillMap[type];
                 for (const [fieldName, dataKey] of Object.entries(fields)) {
                     const field = document.querySelector(`[name="${fieldName}"]`);
                     if (field) {
-                        if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e') {
+                        if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e' || fieldName == 'state_provider_e' ) {
                             field.checked = data[dataKey] == 1;
                         } else {
                             field.value = data[dataKey] ?? '';

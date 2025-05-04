@@ -8,6 +8,7 @@ use App\Models\MovimentsIn;
 use App\Models\MovimentsOut;
 use App\Models\product;
 use App\Models\ProductMoviment;
+use App\Models\provider;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,6 +21,8 @@ class invetaryController extends Controller
         $this->middleware('auth');
     }
 
+    // Metodos para entradas
+
     public function inventaryInList()
     {
         $moviments = MovimentsIn::with(['products.product', 'employee'])
@@ -29,42 +32,43 @@ class invetaryController extends Controller
         return view('inventary.inventaryIn', compact('moviments'));
     }
 
-    public function inventaryOutList()
-    {
-
-        $products = MovimentsOut::all();
-
-        return view('inventary.inventaryOut', compact('products'));
-    }
-
+    
     public function delMoviment(Request $request)
     {
-        MovimentsIn::destroy($request->id);
-        return redirect()->route('inventaryI');
+        if($request->type == 1){
+            MovimentsIn::destroy($request->id);
+            $rute = 'inventaryI';
+        } else {
+            MovimentsOut::destroy($request->id);
+            $rute = 'inventaryO';
+        }
+        return redirect()->route($rute);
     }
 
+
+    
 
     public function inventaryInAdd($tp)
     {
-
+        
         $employeeId = auth()->id();
-
+        
         $idIn = MovimentsIn::create([
             'type_client' => $tp,
             'employee_id' => $employeeId,
             'date_in' => now(),
             'description' => 'Temporal'
         ]);
-
+        
         $clients = Client::where('state', 1)->get();
         $collectors = Collector::where('state', 1)->get();
-
+        
         $lastId = $idIn->id;
         $products = product::all();
-
+        
         return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients', 'collectors'));
     }
-
+    
     public function regMovimentsIn(Request $request)
     {
         $request->validate([
@@ -73,15 +77,15 @@ class invetaryController extends Controller
             'amount.*' => 'required',
             'price.*' => 'nullable'
         ]);
-
+        
         $products = $request->input('product');
         $amounts = $request->input('amount');
         $devs = $request->input('amountDev');
         $prices = $request->input('price');
-
+        
         $movId = $request->movId;
         $movUpd = MovimentsIn::findOrFail($movId);
-
+        
         $movUpd->update([
             'id_client' => $request->client,
             'description' => $request->description,
@@ -92,7 +96,7 @@ class invetaryController extends Controller
             $amount = str_replace(',', '.', $amounts[$index]);
             $amountDev = isset($devs[$index]) ? str_replace(',', '.', $devs[$index]) : 0;
             $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
-
+            
             ProductMoviment::create([
                 'id_moviment_in' => $movId,
                 'id_product' => $productId,
@@ -101,7 +105,7 @@ class invetaryController extends Controller
                 'price_product' => $price !== null ? floatval($price) : null
             ]);
         }
-
+        
         // Agregar un mensaje para el toast de éxito
         return redirect()->route('inventaryI')->with([
             'alerta' => [
@@ -112,30 +116,112 @@ class invetaryController extends Controller
                 'mostrarCancelar' => false
             ],
             'stock_alert' => '
-                Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
-                Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
-                Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
+            Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
+            Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
+            Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
         ]);
     }
-
-
+    
+    
     public function descInventaryIn($id)
     {
         $invin = MovimentsIn::findOrFail($id);
         $invproducts = ProductMoviment::where('id_moviment_in', $invin->id)->get();
-
+        
         $totalPrice = $invproducts->sum('price_product');
-
+        
         return view('inventary.inventaryInD', compact('invin', 'invproducts', 'totalPrice'));
     }
 
+     // Metodos para Salidas
+
+    public function inventaryOutList()
+    {
+    
+        $moviments = MovimentsOut::all();
+    
+        return view('inventary.inventaryOut', compact('moviments'));
+    }
+
+    public function inventaryOutAdd()
+    {
+        
+        $employeeId = auth()->id();
+        
+        $idOut = MovimentsOut::create([
+            'employee_id' => $employeeId,
+            'date_out' => now(),
+            'description' => 'Temporal'
+        ]);
+        
+        $providers = provider::where('state', 1)->get();
+        
+        $lastId = $idOut->id;
+        $products = product::all();
+        
+        return view('inventary.inventaryOutR', compact('products', 'lastId', 'providers'));
+    }
+
+    public function regMovimentsOut(Request $request)
+    {
+        $request->validate([
+            'provider' => 'required',
+            'product.*' => 'required|exists:products,id',
+            'amount.*' => 'required',
+            'price.*' => 'nullable'
+        ]);
+        
+        $products = $request->input('product');
+        $amounts = $request->input('amount');
+        $devs = $request->input('amountDev');
+        $prices = $request->input('price');
+        
+        $movId = $request->movId;
+        $movUpd = MovimentsIn::findOrFail($movId);
+        
+        $movUpd->update([
+            'id_provider' => $request->client,
+            'description' => $request->description,
+            'updated_at' => now()
+        ]);
+
+        foreach ($products as $index => $productId) {
+            $amount = str_replace(',', '.', $amounts[$index]);
+            $amountDev = isset($devs[$index]) ? str_replace(',', '.', $devs[$index]) : 0;
+            $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
+            
+            ProductMoviment::create([
+                'id_moviment_out' => $movId,
+                'id_product' => $productId,
+                'amount_kg' => floatval($amount),
+                'amount_dev_kg' => floatval($amountDev),
+                'price_product' => $price !== null ? floatval($price) : null
+            ]);
+        }
+        
+        // Agregar un mensaje para el toast de éxito
+        return redirect()->route('inventaryI')->with([
+            'alerta' => [
+                'titulo' => '¡Éxito!',
+                'mensaje' => 'Movimiento N° ' . $movId . ' agregado correctamente.',
+                'icono' => 'success',
+                'confirmarTexto' => 'Entendido',
+                'mostrarCancelar' => false
+            ],
+            'stock_alert' => '
+            Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
+            Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
+            Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
+        ]);
+    }
+    
     public function dwnlBill($id)
     {
         $moviment = MovimentsIn::with('products.product')->findOrFail($id);
-
+        
         // Obtener el cliente relacionado
         $clientData = $moviment->client_data;
-
+        
         // Fecha con Carbon
         $fecha = $moviment->created_at;
         $carbon = Carbon::parse($fecha);
@@ -166,7 +252,7 @@ class invetaryController extends Controller
 
         // Generar el PDF
         $pdf = Pdf::loadView('inventary.pdfRP', $data);
-
+        
         return $pdf->download("FCT_00000{$moviment->id}.pdf");
     }
 }

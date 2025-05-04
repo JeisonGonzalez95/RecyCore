@@ -20,8 +20,7 @@ class Invetaries extends Migration
 
         Schema::create('moviments_out', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->tinyInteger('type_client');
-            $table->unsignedInteger('id_client')->nullable();
+            $table->text('id_provider')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->date('date_out');
             $table->text('description')->nullable();

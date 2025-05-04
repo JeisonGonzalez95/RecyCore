@@ -4,7 +4,7 @@ require('./bootstrap');
 require('./sweetalert');
 require('./editForms');
 
-if (isRoute('/inventaryIf')) require('./formInventary');
+if (isRoute('/inventaryIf') || isRoute('/inventaryOf')) require('./formInventary');
 if (isRoute('/index')) require('./dashboard');
 if (isRoute('/collectorList')) require('./countrys');
 if (isRoute('/registerEc') || isRoute('/employees')) require('./validatePsw');

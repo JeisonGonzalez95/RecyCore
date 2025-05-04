@@ -11,11 +11,20 @@ class MovimentsOut extends Model
 
     protected $table = 'moviments_out';
 
-    protected $fillable = ['name_client', 'employee_id', 'date_out', 'description'];
+    protected $fillable = ['id_provider', 'employee_id', 'date_out', 'description'];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(provider::class);
+    }
+    public function products()
+    {
+        return $this->hasMany(ProductMoviment::class, 'id_moviment_out');
     }
     
     public function product_moviment()
