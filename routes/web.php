@@ -5,6 +5,7 @@ use App\Http\Controllers\collectorsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\employeesController;
 use App\Http\Controllers\invetaryController;
+use App\Http\Controllers\licencesController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\menusController;
 use App\Http\Controllers\productsController;
@@ -48,16 +49,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventaryI', [invetaryController::class, 'inventaryInList'])->name('inventaryI');
     Route::get('/inventaryIf/{tp}', [invetaryController::class, 'inventaryInAdd'])->name('inventaryIf');
     Route::post('/addMovimentIn', [invetaryController::class, 'regMovimentsIn'])->name('addMovimentIn');
-    Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
     Route::get('/descInvIn/{id}', [invetaryController::class, 'descInventaryIn'])->name('descInvIn');
-    Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac');
-    
+    Route::get('/descCert/{id}', [invetaryController::class, 'dwnlCert'])->name('descCert');
     
     // Inventarios Salida
     Route::get('/inventaryO', [invetaryController::class, 'inventaryOutList'])->name('inventaryO');
     Route::get('/inventaryOf', [invetaryController::class, 'inventaryOutAdd'])->name('inventaryOf');
     Route::post('/addMovimentOut', [invetaryController::class, 'regMovimentsOut'])->name('addMovimentOut');
-
+    Route::get('/descInvOut/{id}', [invetaryController::class, 'descInventaryOut'])->name('descInvOut');
+    Route::get('/descFac/{id}', [invetaryController::class, 'dwnlBill'])->name('descFac');
+    
+    // Inventarios Compactado
+    Route::get('/inventaryC', [invetaryController::class, 'inventaryCompactList'])->name('inventaryC');
+    
+    //Inventarios General
+    Route::post('/delMov', [invetaryController::class, 'delMoviment'])->name('delMov');
 
     // Productos
     Route::get('/productList', [productsController::class, 'productsList'])->name('productList');
@@ -79,6 +85,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/providerR', [providersController::class, 'createProvider'])->name('providerR');
     Route::post('/providerE', [providersController::class, 'editProvider'])->name('providerE');
     
+    //Permisos
+    Route::get('/licenceList', [licencesController::class, 'licencesList'])->name('licenceList');
+    Route::post('/licenceR', [licencesController::class, 'createLicence'])->name('licenceR');
+    Route::post('/licenceE', [licencesController::class, 'editLicence'])->name('licenceE');
+    Route::post('/licenceD', [licencesController::class, 'deleteLicence'])->name('licenceD');
 
 
 

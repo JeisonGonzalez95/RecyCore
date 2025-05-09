@@ -87,8 +87,8 @@
                                 @endif
                                 <div class="col-md-3 d-flex align-items-center mb-3">
                                     <label for="price" class="me-2 mb-0" style="white-space: nowrap;">Precio:</label>
-                                    <input type="number" id="price" name="price[]" class="form-control" min="1"
-                                        value="0" required readonly>
+                                    <input type="hidden" class="price-hidden" name="price[]">
+                                    <input type="text" class="form-control price-visible" name="price_v[]" min="1" value="0" required readonly>
                                 </div>
                                 <div class="col-md-1 d-flex align-items-center mb-3">
                                     <a href="#" id="delete_item" class="btn btn-outline-danger" disabled>

@@ -27,20 +27,14 @@
                     {{ session('fullname') }} <br>
                     <p id="hora">: </p>
                 </span>
-                <form action="{{ route('logout') }}" method="POST" onsubmit="localStorage.clear()">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-success" title="Cerrar Sesión">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
-                </form>
             </div>
         </div>
     </nav>
 
     <div id="menu-data" data-slugs="{{ htmlspecialchars(json_encode($menus->pluck('slug_menu')), ENT_QUOTES, 'UTF-8') }}">
     </div>
-
     <div class="sidebar" id="sidebar">
+        <button id="menuToggle" class="menu-toggle">☰</button>
         @foreach ($menus as $menu)
             <div id="{{ $menu->slug_menu }}" class="sidebar-section {{ !$loop->first ? 'hidden' : '' }}">
                 <a href="{{ route('index') }}" class="menu-item active">Inicio</a>
@@ -49,6 +43,11 @@
                         {{ $item->name_item }}
                     </a>
                 @endforeach
+                <form action="{{ route('logout') }}" method="POST" onsubmit="localStorage.clear()">
+                    @csrf
+                    <button type="submit" id="logout-link" class="menu-item logout-link">Cerrar sesión</button>
+                </form>
+
             </div>
         @endforeach
     </div>

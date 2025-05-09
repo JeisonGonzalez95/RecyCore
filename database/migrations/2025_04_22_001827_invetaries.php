@@ -13,7 +13,7 @@ class Invetaries extends Migration
             $table->tinyInteger('type_client');
             $table->unsignedInteger('id_client')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-            $table->date('date_in');
+            $table->datetime('date_in');
             $table->text('description')->nullable();
             $table->timestamps();
         });
@@ -22,7 +22,7 @@ class Invetaries extends Migration
             $table->bigIncrements('id');
             $table->text('id_provider')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-            $table->date('date_out');
+            $table->datetime('date_out');
             $table->text('description')->nullable();
             $table->timestamps();
         });

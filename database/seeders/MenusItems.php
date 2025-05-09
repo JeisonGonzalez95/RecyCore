@@ -33,6 +33,7 @@ class MenusItems extends Seeder
                 'items' => [
                     ['name' => 'Entradas', 'route' => 'inventaryI'],
                     ['name' => 'Salidas',  'route' => 'inventaryO'],
+                    ['name' => 'Compactado',  'route' => 'inventaryC'],
                 ],
             ],
             [
@@ -40,7 +41,8 @@ class MenusItems extends Seeder
                 'slug' => 'sis',
                 'state' => 1,
                 'items' => [
-                    ['name' => 'Menus',     'route' => 'menusList']
+                    ['name' => 'Menus',     'route' => 'menusList'],
+                    ['name' => 'Permisos',     'route' => 'licenceList']
                 ],
             ],
         ];

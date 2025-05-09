@@ -10,21 +10,32 @@ document.addEventListener('DOMContentLoaded', function () {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
         const amountDevInput = row.querySelector('input[name="amountDev[]"]');
-        const priceInput = row.querySelector('input[name="price[]"]');
-
+        const priceInput = row.querySelector('.price-hidden');
+        const priceViewInput = row.querySelector('.price-visible');
+    
         const selectedOption = productSelect.options[productSelect.selectedIndex];
         const unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
-
+    
         const amount = parseFloat((amountInput.value || '0').replace(',', '.')) || 0;
         let amountDev = 0;
-
+    
         if (amountDevInput && isVisible(amountDevInput)) {
             amountDev = parseFloat((amountDevInput.value || '0').replace(',', '.')) || 0;
         }
-
+    
         const netAmount = Math.max(0, amount - amountDev);
         const total = unitPrice * netAmount;
-        priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
+    
+        priceInput.value = total;
+    
+        if (priceViewInput) {
+            const formatted = total.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            });
+            priceViewInput.value = formatted;
+        }
     }
 
     // Función para asociar eventos a cada fila

@@ -3,6 +3,8 @@ const isRoute = path => window.location.pathname.includes(path);
 require('./bootstrap');
 require('./sweetalert');
 require('./editForms');
+require('./charging');
+require('./sidebar');
 
 if (isRoute('/inventaryIf') || isRoute('/inventaryOf')) require('./formInventary');
 if (isRoute('/index')) require('./dashboard');
@@ -11,6 +13,8 @@ if (isRoute('/registerEc') || isRoute('/employees')) require('./validatePsw');
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    
     // -------------------------------
     // DataTables y reloj
     // -------------------------------
@@ -28,22 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     actualizarHora();
     setInterval(actualizarHora, 60000);
-
-    // -------------------------------
-    // Sidebar Toggle
-    // -------------------------------
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const contentWrapper = document.querySelector('.content-wrapper');
-    const resizableContent = document.querySelector('.resizable-content');
-
-    menuToggle?.addEventListener('click', () => {
-        const isHidden = sidebar.classList.toggle('hidden');
-        const width = isHidden ? '100%' : 'calc(100% - 25px)';
-        contentWrapper.style.marginLeft = isHidden ? '0' : '100px';
-        contentWrapper.style.width = width;
-        if (resizableContent) resizableContent.style.width = width;
-    });
 
 
     // -------------------------------

@@ -15,6 +15,9 @@ class MovimentsIn extends Model
     protected $table = 'moviments_in';
 
     protected $fillable = ['type_client', 'id_client', 'employee_id', 'date_in', 'description'];
+    protected $casts = [
+        'date_in' => 'datetime',
+    ];
 
     public function employee()
     {

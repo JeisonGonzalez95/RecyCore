@@ -32,10 +32,10 @@ class invetaryController extends Controller
         return view('inventary.inventaryIn', compact('moviments'));
     }
 
-    
+
     public function delMoviment(Request $request)
     {
-        if($request->type == 1){
+        if ($request->type == 1) {
             MovimentsIn::destroy($request->id);
             $rute = 'inventaryI';
         } else {
@@ -46,29 +46,29 @@ class invetaryController extends Controller
     }
 
 
-    
+
 
     public function inventaryInAdd($tp)
     {
-        
+
         $employeeId = auth()->id();
-        
+
         $idIn = MovimentsIn::create([
             'type_client' => $tp,
             'employee_id' => $employeeId,
             'date_in' => now(),
             'description' => 'Temporal'
         ]);
-        
+
         $clients = Client::where('state', 1)->get();
         $collectors = Collector::where('state', 1)->get();
-        
+
         $lastId = $idIn->id;
         $products = product::all();
-        
+
         return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients', 'collectors'));
     }
-    
+
     public function regMovimentsIn(Request $request)
     {
         $request->validate([
@@ -77,15 +77,15 @@ class invetaryController extends Controller
             'amount.*' => 'required',
             'price.*' => 'nullable'
         ]);
-        
+
         $products = $request->input('product');
         $amounts = $request->input('amount');
         $devs = $request->input('amountDev');
         $prices = $request->input('price');
-        
+
         $movId = $request->movId;
         $movUpd = MovimentsIn::findOrFail($movId);
-        
+
         $movUpd->update([
             'id_client' => $request->client,
             'description' => $request->description,
@@ -96,7 +96,7 @@ class invetaryController extends Controller
             $amount = str_replace(',', '.', $amounts[$index]);
             $amountDev = isset($devs[$index]) ? str_replace(',', '.', $devs[$index]) : 0;
             $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
-            
+
             ProductMoviment::create([
                 'id_moviment_in' => $movId,
                 'id_product' => $productId,
@@ -105,7 +105,7 @@ class invetaryController extends Controller
                 'price_product' => $price !== null ? floatval($price) : null
             ]);
         }
-        
+
         // Agregar un mensaje para el toast de éxito
         return redirect()->route('inventaryI')->with([
             'alerta' => [
@@ -115,50 +115,50 @@ class invetaryController extends Controller
                 'confirmarTexto' => 'Entendido',
                 'mostrarCancelar' => false
             ],
-            'stock_alert' => '
-            Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
-            Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
-            Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
+            // 'stock_alert' => '
+            // Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
+            // Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
+            // Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
         ]);
     }
-    
-    
+
+
     public function descInventaryIn($id)
     {
         $invin = MovimentsIn::findOrFail($id);
         $invproducts = ProductMoviment::where('id_moviment_in', $invin->id)->get();
-        
+
         $totalPrice = $invproducts->sum('price_product');
-        
+
         return view('inventary.inventaryInD', compact('invin', 'invproducts', 'totalPrice'));
     }
 
-     // Metodos para Salidas
+    // Metodos para Salidas
 
     public function inventaryOutList()
     {
-    
+
         $moviments = MovimentsOut::all();
-    
+
         return view('inventary.inventaryOut', compact('moviments'));
     }
 
     public function inventaryOutAdd()
     {
-        
+
         $employeeId = auth()->id();
-        
+
         $idOut = MovimentsOut::create([
             'employee_id' => $employeeId,
             'date_out' => now(),
             'description' => 'Temporal'
         ]);
-        
+
         $providers = provider::where('state', 1)->get();
-        
+
         $lastId = $idOut->id;
         $products = product::all();
-        
+
         return view('inventary.inventaryOutR', compact('products', 'lastId', 'providers'));
     }
 
@@ -170,17 +170,17 @@ class invetaryController extends Controller
             'amount.*' => 'required',
             'price.*' => 'nullable'
         ]);
-        
+
         $products = $request->input('product');
         $amounts = $request->input('amount');
         $devs = $request->input('amountDev');
         $prices = $request->input('price');
-        
+
         $movId = $request->movId;
-        $movUpd = MovimentsIn::findOrFail($movId);
-        
+        $movUpd = MovimentsOut::findOrFail($movId);
+
         $movUpd->update([
-            'id_provider' => $request->client,
+            'id_provider' => $request->provider,
             'description' => $request->description,
             'updated_at' => now()
         ]);
@@ -189,7 +189,7 @@ class invetaryController extends Controller
             $amount = str_replace(',', '.', $amounts[$index]);
             $amountDev = isset($devs[$index]) ? str_replace(',', '.', $devs[$index]) : 0;
             $price = isset($prices[$index]) ? str_replace(',', '.', $prices[$index]) : null;
-            
+
             ProductMoviment::create([
                 'id_moviment_out' => $movId,
                 'id_product' => $productId,
@@ -198,42 +198,45 @@ class invetaryController extends Controller
                 'price_product' => $price !== null ? floatval($price) : null
             ]);
         }
-        
-        // Agregar un mensaje para el toast de éxito
-        return redirect()->route('inventaryI')->with([
+
+        return redirect()->route('inventaryO')->with([
             'alerta' => [
                 'titulo' => '¡Éxito!',
                 'mensaje' => 'Movimiento N° ' . $movId . ' agregado correctamente.',
                 'icono' => 'success',
                 'confirmarTexto' => 'Entendido',
                 'mostrarCancelar' => false
-            ],
-            'stock_alert' => '
-            Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
-            Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
-            Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
+            ]
         ]);
     }
-    
+
+    public function descInventaryOut($id)
+    {
+        $invout = MovimentsOut::findOrFail($id);
+        $invproducts = ProductMoviment::where('id_moviment_out', $invout->id)->get();
+
+        $totalPrice = $invproducts->sum('price_product');
+
+        return view('inventary.inventaryOutD', compact('invout', 'invproducts', 'totalPrice'));
+    }
+
     public function dwnlBill($id)
     {
-        $moviment = MovimentsIn::with('products.product')->findOrFail($id);
-        
-        // Obtener el cliente relacionado
-        $clientData = $moviment->client_data;
-        
-        // Fecha con Carbon
-        $fecha = $moviment->created_at;
+        $moviment = MovimentsOut::with('products.product')->findOrFail($id);
+
+        $providerData = $moviment->provider;
+
+        $fecha = $moviment->date_out;
         $carbon = Carbon::parse($fecha);
         $data = [
             'dia' => $carbon->format('d'),
             'mes' => $carbon->format('m'),
             'año' => $carbon->format('Y'),
-            'numero_remision' => 'ARP-' . str_pad($moviment->id, 2, '0', STR_PAD_LEFT),
-            'cliente_nombre' => $clientData?->name ?? 'N/A',
-            'cliente_nit' => $clientData && $moviment->type_client == 2 ? $clientData->nit : ($clientData && $moviment->type_client == 1 ? $clientData->dni : 'N/A'),
-            'cliente_direccion' => $clientData?->address ?? 'N/A',
-            'cliente_telefono' => $clientData?->phone ?? 'N/A',
+            'numero_remision' => 'RCP-' . str_pad($moviment->id, 2, '0', STR_PAD_LEFT),
+            'cliente_nombre' => $providerData?->name ?? 'N/A',
+            'cliente_nit' => $providerData?->nit ?? 'N/A',
+            'cliente_direccion' => $providerData?->address ?? 'N/A',
+            'cliente_telefono' => $providerData?->phone ?? 'N/A',
             'telefono_cc' => '3150062121 - 1018433374',
             'materiales' => $moviment->products->map(function ($product) {
                 return [
@@ -245,14 +248,41 @@ class invetaryController extends Controller
             'tel' => '29920309',
             'cc' => '1233223323',
             'placa' => 'ALA954',
-            'diligenciador' => 'LIZETH VERA',
+            'diligenciador' => 'RECYPLUS',
             'observaciones' => '',
-            'imagen' => 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/logorz.png'))),
+            'imagen' => 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/recyplus1.png'))),
         ];
 
-        // Generar el PDF
         $pdf = Pdf::loadView('inventary.pdfRP', $data);
-        
-        return $pdf->download("FCT_00000{$moviment->id}.pdf");
+
+        return $pdf->download("RCP_00000{$moviment->id}.pdf");
+    }
+
+    public function dwnlCert($id)
+    {
+        $moviment = MovimentsIn::with('products.product')->findOrFail($id);
+        $clientData = $moviment->client_data;
+
+        $materiales = [];
+        foreach ($moviment->products as $index => $product) {
+            $materiales[] = [
+                'item'     => $index + 1,
+                'producto' => $product->product->product_name ?? 'N/D',
+                'cantidad' => $product->amount_kg,
+            ];
+        }
+
+        $data = [
+            'no_cert'    => $moviment->id,
+            'entidad'    => $clientData->name,
+            'nit'        => $clientData->nit,
+            'fecha'      => $moviment->date_in->format('d-m-Y'),
+            'materiales' => $materiales,
+            'fecha_certificado' => Carbon::now()->format('d-m-Y'),
+        ];
+
+        $pdf = PDF::loadView('inventary.certificade', $data);
+
+        return $pdf->download("CERTIFICADO DE RECOLECCION {$clientData->name}.pdf");
     }
 }

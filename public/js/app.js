@@ -13,6 +13,8 @@ var isRoute = function isRoute(path) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 __webpack_require__(/*! ./sweetalert */ "./resources/js/sweetalert.js");
 __webpack_require__(/*! ./editForms */ "./resources/js/editForms.js");
+__webpack_require__(/*! ./charging */ "./resources/js/charging.js");
+__webpack_require__(/*! ./sidebar */ "./resources/js/sidebar.js");
 if (isRoute('/inventaryIf') || isRoute('/inventaryOf')) __webpack_require__(/*! ./formInventary */ "./resources/js/formInventary.js");
 if (isRoute('/index')) __webpack_require__(/*! ./dashboard */ "./resources/js/dashboard.js");
 if (isRoute('/collectorList')) __webpack_require__(/*! ./countrys */ "./resources/js/countrys.js");
@@ -33,21 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   actualizarHora();
   setInterval(actualizarHora, 60000);
-
-  // -------------------------------
-  // Sidebar Toggle
-  // -------------------------------
-  var menuToggle = document.getElementById('menuToggle');
-  var sidebar = document.getElementById('sidebar');
-  var contentWrapper = document.querySelector('.content-wrapper');
-  var resizableContent = document.querySelector('.resizable-content');
-  menuToggle === null || menuToggle === void 0 || menuToggle.addEventListener('click', function () {
-    var isHidden = sidebar.classList.toggle('hidden');
-    var width = isHidden ? '100%' : 'calc(100% - 25px)';
-    contentWrapper.style.marginLeft = isHidden ? '0' : '100px';
-    contentWrapper.style.width = width;
-    if (resizableContent) resizableContent.style.width = width;
-  });
 
   // -------------------------------
   // Menús superiores y sidebar
@@ -170,6 +157,28 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/charging.js":
+/*!**********************************!*\
+  !*** ./resources/js/charging.js ***!
+  \**********************************/
+/***/ (() => {
+
+function mostrarCargando() {
+  var quitar_botones = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var loadingHtml = "\n        <div style=\"position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999;\">\n        <div class=\"loader-container\">\n        <img src=\"../recursos/Logo-ESS1.png\" alt=\"Imagen de carga\" class=\"rotating-image\" onerror=\"this.src='../../recursos/Logo-ESS1.png'\">\n        </div>\n    \n            <span class=\"loading-text\">iSupport</span>\n        </div>\n        <style>\n            body {\n                margin: 0;\n                font-family: Arial, sans-serif;\n                overflow: hidden; /* Prevent scrollbar while loading */\n            }\n            \n            .rotating-image {\n                width: 62px;\n                height: 62px;\n                border-radius: 40%;\n                animation: spin 1.3s linear infinite, colorChange 5s linear infinite;\n            }\n            \n            .loading-text {\n                font-size: 38px;\n                font-weight: 900;\n                animation: colorChange 5s linear infinite;\n            }\n            \n            @keyframes spin {\n                0% { transform: rotate(0deg); }\n                100% { transform: rotate(360deg); }\n            }\n            \n            @keyframes colorChange {\n                0%, 100% { color: #05a5f0; border-top-color: #05a5f0; } /* Blue */\n                33% { color: #ffea00; border-top-color: #ffea00; } /* Yellow */\n                66% { color: #28a745; border-top-color: #28a745; } /* Green */\n            }\n        </style>\n    ";
+  Swal.fire({
+    html: loadingHtml,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    background: 'transparent' /* Transparent background */
+  });
+  if (quitar_botones) {
+    $("#contenedor_botones").html('');
+  }
+}
 
 /***/ }),
 
@@ -419,7 +428,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var productSelect = row.querySelector('.product-select');
     var amountInput = row.querySelector('input[name="amount[]"]');
     var amountDevInput = row.querySelector('input[name="amountDev[]"]');
-    var priceInput = row.querySelector('input[name="price[]"]');
+    var priceInput = row.querySelector('.price-hidden');
+    var priceViewInput = row.querySelector('.price-visible');
     var selectedOption = productSelect.options[productSelect.selectedIndex];
     var unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
     var amount = parseFloat((amountInput.value || '0').replace(',', '.')) || 0;
@@ -429,7 +439,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     var netAmount = Math.max(0, amount - amountDev);
     var total = unitPrice * netAmount;
-    priceInput.value = Number.isInteger(total) ? total : total.toFixed(2).replace(/\.?0+$/, '');
+    priceInput.value = total;
+    if (priceViewInput) {
+      var formatted = total.toLocaleString('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      });
+      priceViewInput.value = formatted;
+    }
   }
 
   // Función para asociar eventos a cada fila
@@ -485,6 +503,56 @@ document.addEventListener('DOMContentLoaded', function () {
         rowToDelete.remove();
       });
     }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/sidebar.js":
+/*!*********************************!*\
+  !*** ./resources/js/sidebar.js ***!
+  \*********************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var menuToggle = document.getElementById('menuToggle');
+  var sidebar = document.getElementById('sidebar');
+  var contentWrapper = document.querySelector('.content-wrapper');
+  var resizableContent = document.querySelector('.resizable-content');
+
+  // Recuperar el estado del sidebar del localStorage
+  var sidebarState = localStorage.getItem('sidebarState');
+
+  // Si está cerrado (oculto), aplica la clase 'hidden' sin animación
+  if (sidebarState === 'hidden') {
+    sidebar.classList.add('hidden');
+    contentWrapper.style.marginLeft = '0'; // Elimina el margen cuando el sidebar está cerrado
+    contentWrapper.style.width = 'calc(100% + 250px)'; // Expande el contenido para ocupar más espacio (ajustable)
+    if (resizableContent) resizableContent.style.width = 'calc(100% + 250px)'; // Ajustar si es necesario
+
+    // Desactivar la animación al cargar
+    sidebar.style.transition = 'none';
+  }
+
+  // Cuando se haga clic en el toggle del sidebar
+  menuToggle === null || menuToggle === void 0 || menuToggle.addEventListener('click', function () {
+    // Volver a habilitar la transición para animar
+    sidebar.style.transition = 'transform 0.3s ease-in-out';
+    var isHidden = sidebar.classList.toggle('hidden');
+    var width = isHidden ? 'calc(100% + 250px)' : 'calc(100% - 25px)'; // Ajusta el tamaño cuando el sidebar está abierto o cerrado
+
+    // Cuando el sidebar está oculto, expande el contentWrapper
+    if (isHidden) {
+      contentWrapper.style.marginLeft = '0'; // El contenido ocupa todo el ancho disponible
+      contentWrapper.style.width = 'calc(100% + 250px)'; // Expande el contenido cuando el sidebar está cerrado
+    } else {
+      contentWrapper.style.marginLeft = '15vh'; // Cuando el sidebar está abierto, agrega el margen
+      contentWrapper.style.width = width; // Ajusta el tamaño según el ancho del sidebar
+    }
+    if (resizableContent) resizableContent.style.width = contentWrapper.style.width;
+
+    // Guardar el estado del sidebar en localStorage
+    localStorage.setItem('sidebarState', isHidden ? 'hidden' : 'visible');
   });
 });
 

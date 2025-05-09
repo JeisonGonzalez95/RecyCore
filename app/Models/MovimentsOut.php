@@ -17,10 +17,9 @@ class MovimentsOut extends Model
     {
         return $this->belongsTo(Employee::class);
     }
-
     public function provider()
     {
-        return $this->belongsTo(provider::class);
+        return $this->belongsTo(provider::class, 'id_provider');
     }
     public function products()
     {

@@ -29,10 +29,10 @@
                     </thead>
                     <tbody>
                         @foreach ($moviments as $moviment)
-                        <tr onclick="window.location='{{ route('descInvIn', ['id' => $moviment->id]) }}';"
+                        <tr onclick="window.location='{{ route('descInvOut', ['id' => $moviment->id]) }}';"
                             style="cursor:pointer;">
                             <td>{{ $moviment->id }}</td>
-                            <td>{{ $moviment->provider->name ?? 'Sin cliente' }}</td>
+                            <td>{{ $moviment->provider->name ?? 'Sin Proveedor' }}</td>
                             <td style="white-space: nowrap;">
                                 <ul class="text-start m-0 p-0" style="list-style-position: inside;">
                                     @foreach ($moviment->products as $product)

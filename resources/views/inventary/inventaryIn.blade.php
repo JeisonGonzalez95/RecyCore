@@ -59,9 +59,9 @@
                                     <td>{{ $moviment->date_in }}</td>
                                     <td>{{ $moviment->employee->fullname ?? 'Sin usuario' }}</td>
                                     <td>
-                                        <a href="{{ route('descFac', ['id' => $moviment->id, 'type' => 2]) }}"
-                                            class="btn btn-outline-secondary" title="Imprimir factura">
-                                            <i class="fa-solid fa-print"></i>
+                                        <a href="{{ route('descCert', ['id' => $moviment->id]) }}"
+                                            class="btn btn-outline-secondary" title="Descargar Certificado">
+                                            <i class="fa-regular fa-file-pdf"></i>
                                         </a>
                                     </td>
                                 </tr>

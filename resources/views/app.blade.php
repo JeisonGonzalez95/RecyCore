@@ -70,6 +70,12 @@
 
     <!-- Script de app.js -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script>
+        window.addEventListener('beforeunload', function () {
+            mostrarCargando(false);
+            console.log('mostrar cargando');
+        });
+    </script>
 </body>
 
 <footer class="footer">
