@@ -20,10 +20,19 @@ if (isRoute('/index')) __webpack_require__(/*! ./dashboard */ "./resources/js/da
 if (isRoute('/collectorList')) __webpack_require__(/*! ./countrys */ "./resources/js/countrys.js");
 if (isRoute('/registerEc') || isRoute('/employees')) __webpack_require__(/*! ./validatePsw */ "./resources/js/validatePsw.js");
 document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.selectpicker').forEach(function (el) {
+    new Choices(el, {
+      removeItemButton: true,
+      itemSelectText: '',
+      delimiter: ",",
+      searchEnabled: true,
+      noChoicesText: ''
+    });
+  });
   // -------------------------------
   // DataTables y reloj
   // -------------------------------
-  $('#tablaEmpleados').DataTable({
+  $('table').DataTable({
     language: {
       url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
     }
@@ -309,9 +318,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 document.addEventListener("DOMContentLoaded", function () {
+  // Inicializar Choices solo si existen los campos
+  var menusField = document.getElementById('menus_e');
+  var itemsField = document.getElementById('items_e');
+  if (menusField) {
+    window.choicesMenus = new Choices(menusField, {
+      removeItemButton: true
+    });
+  }
+  if (itemsField) {
+    window.choicesItems = new Choices(itemsField, {
+      removeItemButton: true
+    });
+  }
   window.mostrarFormulario = function (btn) {
     var formularioId = btn.getAttribute('data-form');
-    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId'];
+    var dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId', 'licenceId'];
 
     // Ocultar todos los formularios
     document.querySelectorAll('.formulario').forEach(function (f) {
@@ -319,7 +341,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Mostrar el formulario correspondiente
-    document.getElementById(formularioId).style.display = 'block';
+    var formulario = document.getElementById(formularioId);
+    if (formulario) {
+      formulario.style.display = 'block';
+    }
     for (var _i = 0, _dataTypes = dataTypes; _i < _dataTypes.length; _i++) {
       var type = _dataTypes[_i];
       if (btn.dataset[type]) {
@@ -376,31 +401,51 @@ document.addEventListener("DOMContentLoaded", function () {
             'email_provider_e': 'email',
             'address_e': 'address',
             'state_provider_e': 'state'
+          },
+          licenceId: {
+            'id_licence': 'id',
+            'employee_e': 'user',
+            'menus_e[]': 'menus',
+            'items_e[]': 'items'
           }
         };
         var fields = fillMap[type];
         for (var _i2 = 0, _Object$entries = Object.entries(fields); _i2 < _Object$entries.length; _i2++) {
+          var _data$dataKey;
           var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
             fieldName = _Object$entries$_i[0],
             dataKey = _Object$entries$_i[1];
-          var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
-          if (field) {
-            if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e' || fieldName == 'state_provider_e') {
-              field.checked = data[dataKey] == 1;
-            } else {
-              var _data$dataKey;
-              field.value = (_data$dataKey = data[dataKey]) !== null && _data$dataKey !== void 0 ? _data$dataKey : '';
+          var value = (_data$dataKey = data[dataKey]) !== null && _data$dataKey !== void 0 ? _data$dataKey : '';
+          if (fieldName === 'menus_e[]' && window.choicesMenus) {
+            var menuIds = value.split(',').map(function (id) {
+              return id.trim();
+            });
+            choicesMenus.removeActiveItems();
+            choicesMenus.setChoiceByValue(menuIds);
+          } else if (fieldName === 'items_e[]' && window.choicesItems) {
+            var itemIds = value.split(',').map(function (id) {
+              return id.trim();
+            });
+            choicesItems.removeActiveItems();
+            choicesItems.setChoiceByValue(itemIds);
+          } else {
+            var field = document.querySelector("[name=\"".concat(fieldName, "\"]"));
+            if (field) {
+              if (field.type === 'checkbox') {
+                field.checked = value == 1;
+              } else {
+                field.value = value;
+              }
             }
           }
         }
 
-        // Seleccionar el país en el campo 'country_e' (edición)
-        var countrySelectEdit = document.getElementById('country_e'); // Campo de país en edición
-        if (countrySelectEdit) {
-          var countryCode = data.country; // Obtener el código del país asignado (ejemplo: 'CO')
-          var option = countrySelectEdit.querySelector("option[value=\"".concat(countryCode, "\"]"));
+        // Seleccionar país si existe
+        var countrySelectEdit = document.getElementById('country_e');
+        if (countrySelectEdit && data.country) {
+          var option = countrySelectEdit.querySelector("option[value=\"".concat(data.country, "\"]"));
           if (option) {
-            option.selected = true; // Selecciona el país correspondiente
+            option.selected = true;
           }
         }
         break;

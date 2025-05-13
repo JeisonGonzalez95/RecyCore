@@ -1,13 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Inicializar Choices solo si existen los campos
+    const menusField = document.getElementById('menus_e');
+    const itemsField = document.getElementById('items_e');
+
+    if (menusField) {
+        window.choicesMenus = new Choices(menusField, { removeItemButton: true });
+    }
+    if (itemsField) {
+        window.choicesItems = new Choices(itemsField, { removeItemButton: true });
+    }
+
     window.mostrarFormulario = function (btn) {
         const formularioId = btn.getAttribute('data-form');
-        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId'];
+        const dataTypes = ['menuId', 'itemId', 'prodId', 'userId', 'clientId', 'collectorId', 'providerId', 'licenceId'];
 
         // Ocultar todos los formularios
         document.querySelectorAll('.formulario').forEach(f => f.style.display = 'none');
 
         // Mostrar el formulario correspondiente
-        document.getElementById(formularioId).style.display = 'block';
+        const formulario = document.getElementById(formularioId);
+        if (formulario) {
+            formulario.style.display = 'block';
+        }
 
         for (const type of dataTypes) {
             if (btn.dataset[type]) {
@@ -66,27 +80,44 @@ document.addEventListener("DOMContentLoaded", function () {
                         'address_e': 'address',
                         'state_provider_e': 'state'
                     },
+                    licenceId: {
+                        'id_licence': 'id',
+                        'employee_e': 'user',
+                        'menus_e[]': 'menus',
+                        'items_e[]': 'items'
+                    },
                 };
 
                 const fields = fillMap[type];
                 for (const [fieldName, dataKey] of Object.entries(fields)) {
-                    const field = document.querySelector(`[name="${fieldName}"]`);
-                    if (field) {
-                        if (fieldName === 'state_product_e' || fieldName === 'state_client_e' || fieldName === 'state_coll_e' || fieldName == 'state_provider_e' ) {
-                            field.checked = data[dataKey] == 1;
-                        } else {
-                            field.value = data[dataKey] ?? '';
+                    const value = data[dataKey] ?? '';
+
+                    if (fieldName === 'menus_e[]' && window.choicesMenus) {
+                        const menuIds = value.split(',').map(id => id.trim());
+                        choicesMenus.removeActiveItems();
+                        choicesMenus.setChoiceByValue(menuIds);
+                    } else if (fieldName === 'items_e[]' && window.choicesItems) {
+                        const itemIds = value.split(',').map(id => id.trim());
+                        choicesItems.removeActiveItems();
+                        choicesItems.setChoiceByValue(itemIds);
+                    } else {
+                        const field = document.querySelector(`[name="${fieldName}"]`);
+                        if (field) {
+                            if (field.type === 'checkbox') {
+                                field.checked = value == 1;
+                            } else {
+                                field.value = value;
+                            }
                         }
                     }
                 }
 
-                // Seleccionar el país en el campo 'country_e' (edición)
-                const countrySelectEdit = document.getElementById('country_e'); // Campo de país en edición
-                if (countrySelectEdit) {
-                    const countryCode = data.country; // Obtener el código del país asignado (ejemplo: 'CO')
-                    const option = countrySelectEdit.querySelector(`option[value="${countryCode}"]`);
+                // Seleccionar país si existe
+                const countrySelectEdit = document.getElementById('country_e');
+                if (countrySelectEdit && data.country) {
+                    const option = countrySelectEdit.querySelector(`option[value="${data.country}"]`);
                     if (option) {
-                        option.selected = true; // Selecciona el país correspondiente
+                        option.selected = true;
                     }
                 }
 

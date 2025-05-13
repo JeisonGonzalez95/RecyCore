@@ -35,22 +35,41 @@
     </div>
     <div class="sidebar" id="sidebar">
         <button id="menuToggle" class="menu-toggle">☰</button>
-        @foreach ($menus as $menu)
-            <div id="{{ $menu->slug_menu }}" class="sidebar-section {{ !$loop->first ? 'hidden' : '' }}">
+
+        {{-- Si hay menús, mostrar secciones por menú --}}
+        @if ($menus->isNotEmpty())
+            @foreach ($menus as $menu)
+                <div id="{{ $menu->slug_menu }}" class="sidebar-section {{ !$loop->first ? 'hidden' : '' }}">
+                    {{-- Ítems comunes --}}
+                    <a href="{{ route('index') }}" class="menu-item active">Inicio</a>
+
+                    {{-- Ítems específicos por menú --}}
+                    @foreach ($menu->items as $item)
+                        <a href="{{ route($item->route_item) }}" class="menu-item">
+                            {{ $item->name_item }}
+                        </a>
+                    @endforeach
+
+                    {{-- Cerrar sesión --}}
+                    <form action="{{ route('logout') }}" method="POST" onsubmit="localStorage.clear()">
+                        @csrf
+                        <button type="submit" id="logout-link" class="menu-item logout-link">Cerrar sesión</button>
+                    </form>
+                </div>
+            @endforeach
+        @else
+            {{-- Si no hay menús, mostrar sección por defecto con Inicio y Logout --}}
+            <div class="sidebar-section">
                 <a href="{{ route('index') }}" class="menu-item active">Inicio</a>
-                @foreach ($menu->items as $item)
-                    <a href="{{ route($item->route_item) }}" class="menu-item">
-                        {{ $item->name_item }}
-                    </a>
-                @endforeach
+
                 <form action="{{ route('logout') }}" method="POST" onsubmit="localStorage.clear()">
                     @csrf
                     <button type="submit" id="logout-link" class="menu-item logout-link">Cerrar sesión</button>
                 </form>
-
             </div>
-        @endforeach
+        @endif
     </div>
+
 @endsection
 
 @section('contentR')

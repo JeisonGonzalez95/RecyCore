@@ -14,15 +14,24 @@ if (isRoute('/registerEc') || isRoute('/employees')) require('./validatePsw');
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    
+    document.querySelectorAll('.selectpicker').forEach(function (el) {
+        new Choices(el, {
+            removeItemButton: true,
+            itemSelectText: '',
+            delimiter: ",",
+            searchEnabled: true,
+            noChoicesText: '',
+        });
+    });
     // -------------------------------
     // DataTables y reloj
     // -------------------------------
-    $('#tablaEmpleados').DataTable({
+    $('table').DataTable({
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
         }
     });
+
 
     function actualizarHora() {
         const ahora = dayjs().format('HH:mm');

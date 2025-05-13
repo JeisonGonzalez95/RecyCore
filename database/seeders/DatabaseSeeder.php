@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MenusItems::class);
         $this->call(products::class);
         $this->call(DocumentTypesSeeder::class);
+        $this->call(FontsCollectorProviders::class);
     }
 }

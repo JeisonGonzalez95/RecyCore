@@ -12,13 +12,7 @@ class menusController extends Controller
 {
     public function mainMenus()
     {
-        // Trae todos los menús activos con sus ítems activos
-        $menus = mainMenus::with(['items' => function ($query) {
-            $query->where('state', 1);
-        }])
-            ->where('state', 1)
-            ->get();
-
+        // Traer datos de productos, como ya lo tienes
         $data = ProductMoviment::join('products', 'products.id', '=', 'products_moviments.id_product')
             ->select(
                 'products.product_name',
@@ -28,8 +22,10 @@ class menusController extends Controller
             ->groupBy('products.product_name')
             ->get();
 
-        return view('source.index', compact('menus', 'data'));
+        // Pasar la variable a la vista
+        return view('source.index', compact('data'));
     }
+
 
 
     public function menusItemsList()

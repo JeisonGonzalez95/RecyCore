@@ -20,11 +20,11 @@ class Usuarios extends Migration
             $table->string('email', 150);
             $table->string('username', 150)->unique();
             $table->string('password', 255);
+            $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('cascade');
             $table->tinyInteger('state')->default(1);
-            $table->rememberToken(); 
+            $table->rememberToken();
             $table->timestamps();
         });
-        
     }
 
     /**

@@ -89,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/licenceList', [licencesController::class, 'licencesList'])->name('licenceList');
     Route::post('/licenceR', [licencesController::class, 'createLicence'])->name('licenceR');
     Route::post('/licenceE', [licencesController::class, 'editLicence'])->name('licenceE');
-    Route::post('/licenceD', [licencesController::class, 'deleteLicence'])->name('licenceD');
+    Route::get('/licenceD/{id}', [licencesController::class, 'deleteLicence'])->name('licenceD');
 
 
 

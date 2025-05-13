@@ -3,72 +3,50 @@
 
         <div class="bg-glass shadow-sm position-relative">
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Cerrar"
-                popovertarget="menuE" popovertargetaction="hide"></button>
+                popovertarget="licenceE" popovertargetaction="hide"></button>
         </div>
 
         {{-- Formulario Menú --}}
-        <div id="formMenuE" class="formulario" style="display: none;">
+        <div id="formlicenceE" class="formulario" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
-                    <h2 class="fw-bold mb-0">Editar Menú</h2>
+                    <h2 class="fw-bold mb-0">Editar Permisos</h2>
                 </div>
             </div>
 
-            <form action="{{ route('edit_mn') }}" method="POST">
+            <form action="{{ route('licenceE') }}" method="POST">
                 @csrf
-                <input type="hidden" id="menu_id" name="menu_id">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="nombre">Nombre del menu:</label>
-                        <input class="form-control" type="text" name="name_menu_e" id="name_menu_e" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="descripcion">Sigla:</label>
-                        <input class="form-control" type="text" name="slug_menu_e" id="slug_menu_e" required minlength="2">
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-6">
-                        <button class="btn btn-success w-100" type="submit">Editar Menú</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        {{-- Formulario Ítem --}}
-        <div id="formItemE" class="formulario" style="display: none;">
-            <div class="d-flex justify-content-between align-items-center mb-5">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-users fa-2x me-3" style="color:rgb(25, 171, 255);"></i>
-                    <h2 class="fw-bold mb-0">Editar Items</h2>
-                </div>
-            </div>
-            <form action="{{ route('edit_it') }}" method="POST">
-                @csrf
-                <input type="hidden" id="item_id" name="item_id">
+                <input type="hidden" id="id_licence" name="id_licence">
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <label for="nombre">Nombre del item:</label>
-                        <input class="form-control" type="text" name="name_item_e" id="name_item_e">
+                        <label for="nombre">Empleado:</label>
+                        <select name="employee_e" id="employee_e" class="form-control" disabled>
+                            @foreach ($usersE as $user)
+                                <option value="{{ $user->id }}">{{ $user->fullname }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="descripcion">Ruta:</label>
-                        <input class="form-control" type="text" name="route_e" id="route_e">
+                        <label for="descripcion">Menus:</label>
+                        <select name="menus_e[]" id="menus_e" class="form-control selectpicker" multiple>
+                            @foreach ($menus as $menu)
+                                <option value="{{ $menu->id }}">{{ $menu->name_menu }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="descripcion">Menu Principal:</label>
-                        <select class="form-control" type="text" name="main_menu_e" id="main_menu_e">
-                            <option value="">Seleccione Uno...</option>
-                            @foreach ($menusL as $menu)
-                            <option value="{{ $menu->id}}">{{ $menu->name_menu }}</option>                                
+                        <label for="descripcion">Items:</label>
+                        <select name="items_e[]" id="items_e" class="form-control selectpicker" multiple>
+                            @foreach ($items as $item)
+                                <option value="{{ $item->id }}">{{ $item->name_item }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <button class="btn btn-success w-100" type="submit">Editar Item</button>
+                    <div class="col-6">
+                        <button class="btn btn-success w-100" type="submit">Editar Menú</button>
                     </div>
                 </div>
             </form>

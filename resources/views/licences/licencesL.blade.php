@@ -10,15 +10,11 @@
                         <h2 class="fw-bold mb-0">Permisos</h2>
                     </div>
                 </div>
-
-
-
                 <div class="text-center mb-4">
-                    <button popovertarget="menuR" popovertargetaction="show" class="btn btn-outline-primary"
-                        data-form="formMenuR" onclick="mostrarFormulario(this)"><i class="fa-solid fa-user-plus"></i>
-                        Agregar Menu</button>
+                    <button popovertarget="licenceR" popovertargetaction="show" class="btn btn-outline-primary"
+                        data-form="formLicenceR" onclick="mostrarFormulario(this)"><i class="fa-solid fa-user-plus"></i>
+                        Agregar Permisos</button>
                 </div>
-
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered text-center align-middle">
                         <thead class="table-primary">
@@ -35,16 +31,17 @@
                             @foreach ($licencesL as $licence)
                                 <tr>
                                     <td>{{ $licence->id }}</td>
-                                    <td>{{ $licence->employee->name }}</td>
-                                    <td>{{ $licence->id_menus }}</td>
-                                    <td>{{ $licence->id_items }}</td>
+                                    <td>{{ $licence->users->fullname }}</td>
+                                    <td>{{ $licence->menus_text }}</td>
+                                    <td>{{ $licence->items_text }}</td>
                                     <td>{{ $licence->state == 1 ? 'Activo' : 'Inactivo' }}
                                     </td>
                                     @php
                                         $dataLicence = [
                                             'id' => $licence->id,
-                                            'menus' => $licence->name_menu,
-                                            'items' => $licence->slug_menu,
+                                            'user' => $licence->id_user,
+                                            'menus' => $licence->id_menus,
+                                            'items' => $licence->id_items,
                                             'state' => $licence->state,
                                         ];
                                         $mai = 1;
@@ -61,7 +58,7 @@
                                                 <input class="form-check-input" type="checkbox" role="switch"
                                                     id="switchCheckDefault{{ $licence->id }}" name="state_menu_e"
                                                     value="1"
-                                                    data-url="{{ route('delete_mai', ['id' => $licence->id, 'mai' => 1]) }}"
+                                                    data-url="{{ route('licenceD', ['id' => $licence->id]) }}"
                                                     onchange="desactivarMenu(this)"
                                                     {{ $licence->state == 1 ? 'checked' : '' }}>
                                             </div>
@@ -73,6 +70,7 @@
                     </table>
                 </div>
             </div>
+
 
             <div id="licenceR" popover class="popover-bootstrap">
                 <div class="modal-dialog modal-dialog-centered">

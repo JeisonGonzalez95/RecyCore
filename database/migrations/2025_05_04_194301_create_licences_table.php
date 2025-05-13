@@ -15,7 +15,7 @@ class CreateLicencesTable extends Migration
     {
         Schema::create('licences', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('id_employee')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('users_app')->onDelete('cascade');
             $table->string('id_menus');
             $table->string('id_items');
             $table->boolean('state')->default(true);
