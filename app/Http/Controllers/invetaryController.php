@@ -26,7 +26,10 @@ class invetaryController extends Controller
     public function inventaryInList()
     {
         $moviments = MovimentsIn::with(['products.product', 'employee'])
-            ->where('description', '<>', 'Temporal')
+            ->where(function ($query) {
+                $query->where('description', '<>', 'Temporal')
+                    ->orWhereNull('description');
+            })
             ->get();
 
         return view('inventary.inventaryIn', compact('moviments'));
@@ -153,7 +156,11 @@ class invetaryController extends Controller
     public function inventaryOutList()
     {
 
-        $moviments = MovimentsOut::all();
+        $moviments = MovimentsOut::where(function ($query) {
+            $query->where('description', '<>', 'Temporal')
+                ->orWhereNull('description');
+        })->get();
+
 
         return view('inventary.inventaryOut', compact('moviments'));
     }

@@ -44,7 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         'name_prod_e': 'name',
                         'slug_product_e': 'slug',
                         'price_product_sale_e': 'price_sale',
-                        'price_product_purch_e': 'price_purch',
+                        'price_product_purch_c_e': 'price_purch_c',
+                        'price_product_purch_f_e': 'price_purch_f',
                         'state_product_e': 'state'
                     },
                     userId: {

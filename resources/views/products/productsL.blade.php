@@ -42,7 +42,8 @@
                             'name' => $product->product_name,
                             'slug' => $product->slug_product,
                             'price_sale' => round($product->price_product_sale),
-                            'price_purch' => round($product->price_product_purch),
+                            'price_purch_c' => round($product->price_product_purch_c),
+                            'price_purch_f' => round($product->price_product_purch_f),
                             'state' => $product->state
                             ];
                             @endphp

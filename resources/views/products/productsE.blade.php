@@ -26,13 +26,17 @@
                         <label for="descripcion">Sigla:</label>
                         <input class="form-control" type="text" name="slug_product_e" id="slug_product_e" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="descripcion">Precio de venta (COP$):</label>
                         <input class="form-control" type="number" name="price_product_sale_e" id="price_product_sale_e" min="0" required>
                     </div>
-                    <div class="col-md-6">
-                        <label for="descripcion">Precio de compra (COP$):</label>
-                        <input class="form-control" type="number" name="price_product_purch_e" id="price_product_purch_e" min="0" required>
+                    <div class="col-md-4">
+                        <label for="descripcion">Compra Recolector (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_purch_c_e" id="price_product_purch_c_e" min="0" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="descripcion">Compra Fuente (COP$):</label>
+                        <input class="form-control" type="number" name="price_product_purch_f_e" id="price_product_purch_f_e" min="0" required>
                     </div>
                 </div>
                 <div class="row mb-4 justify-content-center text-center">

@@ -27,14 +27,16 @@ class productsController extends Controller
             'name_prod' => 'required|unique:products,product_name',
             'slug_product' => 'required|unique:products,slug_product',
             'price_product_sale' => 'required',
-            'price_product_purch' => 'required'
+            'price_product_purch_c' => 'required',
+            'price_product_purch_f' => 'required'
         ]);
 
         product::create([
             'product_name' => $request->name_prod,
             'slug_product' => $request->slug_product,
             'price_product_sale' => $request->price_product_sale,
-            'price_product_purch' => $request->price_product_purch
+            'price_product_purch_c' => $request->price_product_purch_c,
+            'price_product_purch_f' => $request->price_product_purch_f
         ]);
 
         return redirect()->route('productList')->with('alerta', [
@@ -52,7 +54,8 @@ class productsController extends Controller
             'name_prod_e' => 'required|min:2|unique:main_menus,slug_menu,' . $request->id_product,
             'slug_product_e' => 'required|min:2|unique:main_menus,slug_menu,' . $request->id_product,
             'price_product_sale_e' => 'required',
-            'price_product_purch_e' => 'required'
+            'price_product_purch_c_e' => 'required',
+            'price_product_purch_f_e' => 'required'
         ]);
 
         $stateP = 0;
@@ -66,7 +69,8 @@ class productsController extends Controller
             'product_name' => $request->name_prod_e,
             'slug_product' => $request->slug_product_e,
             'price_product_sale' => $request->price_product_sale_e,
-            'price_product_purch' => $request->price_product_purch_e,
+            'price_product_purch_c' => $request->price_product_purch_c_e,
+            'price_product_purch_f' => $request->price_product_purch_f_e,
             'state' => $stateP,
             'updated_at' => now()
         ]);

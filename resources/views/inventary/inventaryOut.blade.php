@@ -44,7 +44,7 @@
                                 </ul>
                             </td>
                             <td>${{ number_format($moviment->products->sum('price_product')) }}</td>
-                            <td>{{ $moviment->description ?? 'Sin descripción' }}</td>
+                            <td>{{ $moviment->description ?: 'Sin descripción' }}</td>
                             <td>{{ $moviment->date_out }}</td>
                             <td>{{ $moviment->employee->fullname ?? 'Sin usuario' }}</td>
                             <td>
