@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class menusController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function mainMenus()
     {
         // Traer datos de productos, como ya lo tienes

@@ -85,6 +85,16 @@ class products extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'product_name' => 'Vidrio',
+                'slug_product' => 'VDR',
+                'price_product_sale' => 220,
+                'price_product_purch_f' => 100,
+                'price_product_purch_c' => 120,
+                'state' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

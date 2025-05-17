@@ -14,6 +14,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 // RUTA DE LOGIN
+Route::get('/', function () {
+    return view('source.sesion');
+});
+
 Route::get('app', function () {
     return view('source.sesion');
 })->name('app');

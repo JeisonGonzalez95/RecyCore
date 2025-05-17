@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class providersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function providersList()
     {
         $providers = provider::all();

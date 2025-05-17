@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\provider;
 use App\Models\Collector;
 use App\Models\Client;
+use Illuminate\Support\Facades\DB;
 
 class FontsCollectorProviders extends Seeder
 {
@@ -15,14 +16,25 @@ class FontsCollectorProviders extends Seeder
     public function run(): void
     {
         // Insertar un proveedor
-        provider::create([
-            'name'    => 'Aurora PET',
-            'nit'     => '901391906-2',
-            'phone'   => 3112362485,
-            'email'   => 'aurorapet@gmail.com',
-            'address' => 'Calle 12 # 38 - 83',
-            'state'   => true,
+        DB::table('providers')->insert([
+            [
+                'name'    => 'Aurora PET',
+                'nit'     => '901391906-2',
+                'phone'   => '3112362485',
+                'email'   => 'aurorapet@gmail.com',
+                'address' => 'Calle 12 # 38 - 83',
+                'state'   => true,
+            ],
+            [
+                'name'    => 'Tatuajes',
+                'nit'     => '901391907-3',
+                'phone'   => '3112362485',
+                'email'   => 'vidrio@gmail.com',
+                'address' => 'Calle 12 # 38 - 83',
+                'state'   => true,
+            ]
         ]);
+
 
         // Insertar un recolector
         Collector::create([

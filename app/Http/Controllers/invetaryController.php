@@ -35,39 +35,53 @@ class invetaryController extends Controller
 
     public function delMoviment(Request $request)
     {
+        $employeeId = auth()->id();
+
         if ($request->type == 1) {
+            // Movimiento de entrada
             MovimentsIn::destroy($request->id);
+            session()->forget('mov_in_' . $employeeId);
             $rute = 'inventaryI';
         } else {
+            // Movimiento de salida
             MovimentsOut::destroy($request->id);
+            session()->forget('mov_out_' . $employeeId);
             $rute = 'inventaryO';
         }
+
         return redirect()->route($rute);
     }
 
-
-
-
     public function inventaryInAdd($tp)
     {
-
         $employeeId = auth()->id();
+        $sessionKey = 'mov_in_' . $tp . '_' . $employeeId;
 
-        $idIn = MovimentsIn::create([
-            'type_client' => $tp,
-            'employee_id' => $employeeId,
-            'date_in' => now(),
-            'description' => 'Temporal'
-        ]);
+        if (session()->has($sessionKey)) {
+            $idIn = MovimentsIn::find(session()->get($sessionKey));
+            if (!$idIn) {
+                session()->forget($sessionKey);
+            }
+        }
+
+        if (!isset($idIn)) {
+            $idIn = MovimentsIn::create([
+                'type_client' => $tp,
+                'employee_id' => $employeeId,
+                'date_in' => now(),
+                'description' => 'Temporal'
+            ]);
+            session()->put($sessionKey, $idIn->id);
+        }
 
         $clients = Client::where('state', 1)->get();
         $collectors = Collector::where('state', 1)->get();
-
-        $lastId = $idIn->id;
         $products = product::all();
+        $lastId = $idIn->id;
 
         return view('inventary.inventaryInR', compact('products', 'lastId', 'tp', 'clients', 'collectors'));
     }
+
 
     public function regMovimentsIn(Request $request)
     {
@@ -106,7 +120,11 @@ class invetaryController extends Controller
             ]);
         }
 
-        // Agregar un mensaje para el toast de éxito
+        // Limpiar la sesión del movimiento en curso
+        $tp = $movUpd->type_client;
+        $employeeId = auth()->id();
+        session()->forget('mov_in_' . $tp . '_' . $employeeId);
+
         return redirect()->route('inventaryI')->with([
             'alerta' => [
                 'titulo' => '¡Éxito!',
@@ -114,13 +132,10 @@ class invetaryController extends Controller
                 'icono' => 'success',
                 'confirmarTexto' => 'Entendido',
                 'mostrarCancelar' => false
-            ],
-            // 'stock_alert' => '
-            // Hay <b>956.43</b> Kg de <b>PET</b> en Bodega <br>
-            // Hay <b>996.43</b> Kg de <b>Archivo R</b> en Bodega <br>
-            // Hay <b>856.43</b> Kg de <b>Aluminio</b> en Bodega'
+            ]
         ]);
     }
+
 
 
     public function descInventaryIn($id)
@@ -145,22 +160,32 @@ class invetaryController extends Controller
 
     public function inventaryOutAdd()
     {
-
         $employeeId = auth()->id();
+        $sessionKey = 'mov_out_' . $employeeId;
 
-        $idOut = MovimentsOut::create([
-            'employee_id' => $employeeId,
-            'date_out' => now(),
-            'description' => 'Temporal'
-        ]);
+        if (session()->has($sessionKey)) {
+            $idOut = MovimentsOut::find(session()->get($sessionKey));
+            if (!$idOut) {
+                session()->forget($sessionKey);
+            }
+        }
 
-        $providers = provider::where('state', 1)->get();
+        if (!isset($idOut)) {
+            $idOut = MovimentsOut::create([
+                'employee_id' => $employeeId,
+                'date_out' => now(),
+                'description' => 'Temporal'
+            ]);
+            session()->put($sessionKey, $idOut->id);
+        }
 
+        $providers = Provider::where('state', 1)->get();
+        $products = Product::all();
         $lastId = $idOut->id;
-        $products = product::all();
 
         return view('inventary.inventaryOutR', compact('products', 'lastId', 'providers'));
     }
+
 
     public function regMovimentsOut(Request $request)
     {
@@ -199,6 +224,10 @@ class invetaryController extends Controller
             ]);
         }
 
+        // Limpiar la sesión para evitar registros duplicados
+        $employeeId = auth()->id();
+        session()->forget('mov_out_' . $employeeId);
+
         return redirect()->route('inventaryO')->with([
             'alerta' => [
                 'titulo' => '¡Éxito!',
@@ -209,6 +238,7 @@ class invetaryController extends Controller
             ]
         ]);
     }
+
 
     public function descInventaryOut($id)
     {

@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class licencesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function licencesList()
     {
         $licencesL = licence::all();
