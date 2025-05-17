@@ -20,7 +20,7 @@
                             <th>Nombre</th>
                             <th>Sigla</th>
                             <th>Precio de venta</th>
-                            <th>Precio de compra</th>
+                            <th>Precio de compra (recolector)</th>
                             <th>Precio de compra (fuente)</th>
                             <th>Estado</th>
                             <th>Acciones</th>
