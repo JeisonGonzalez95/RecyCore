@@ -10,7 +10,7 @@ class SessionTimeout
 {
     public function handle(Request $request, Closure $next)
     {
-        $timeout = 15; // en minutos
+        $timeout = 120; // en minutos
 
         if (Session::has('last_activity') && (time() - Session::get('last_activity')) > ($timeout * 60)) {
             auth()->guard('web')->logout();
