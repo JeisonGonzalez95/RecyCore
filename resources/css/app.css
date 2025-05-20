@@ -362,7 +362,7 @@ body.no-animate .menu-superior a::after {
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 960px) {
     .product-item,
     .row {
         flex-direction: column !important;
