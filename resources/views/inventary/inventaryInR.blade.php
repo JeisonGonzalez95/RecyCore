@@ -97,6 +97,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p id="total-price" class="fw-bold text-end mt-3">Total: 0</p>
                         <div class="button-plus mb-4">
                             <a href="#" id="add-item">
                                 <i class="fa-solid fa-circle-plus"></i>

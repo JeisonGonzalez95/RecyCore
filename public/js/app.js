@@ -464,20 +464,18 @@ document.addEventListener("DOMContentLoaded", function () {
 /***/ (() => {
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Función para verificar si un elemento está visible
   function isVisible(el) {
     return el && el.offsetParent !== null;
   }
-
-  // Función para actualizar el precio
   function updatePrice(row) {
+    var _selectedOption$getAt;
     var productSelect = row.querySelector('.product-select');
     var amountInput = row.querySelector('input[name="amount[]"]');
     var amountDevInput = row.querySelector('input[name="amountDev[]"]');
     var priceInput = row.querySelector('.price-hidden');
     var priceViewInput = row.querySelector('.price-visible');
     var selectedOption = productSelect.options[productSelect.selectedIndex];
-    var unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
+    var unitPrice = parseFloat(((_selectedOption$getAt = selectedOption.getAttribute('data-price')) === null || _selectedOption$getAt === void 0 ? void 0 : _selectedOption$getAt.replace(',', '.')) || '0');
     var amount = parseFloat((amountInput.value || '0').replace(',', '.')) || 0;
     var amountDev = 0;
     if (amountDevInput && isVisible(amountDevInput)) {
@@ -494,9 +492,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       priceViewInput.value = formatted;
     }
+    updateTotalPrice();
   }
-
-  // Función para asociar eventos a cada fila
+  function updateTotalPrice() {
+    var total = 0;
+    document.querySelectorAll('.price-hidden').forEach(function (input) {
+      var _input$value;
+      var value = parseFloat(((_input$value = input.value) === null || _input$value === void 0 ? void 0 : _input$value.replace(',', '.')) || '0');
+      total += value;
+    });
+    var totalDisplay = document.getElementById('total-price');
+    if (totalDisplay) {
+      totalDisplay.textContent = 'Total: ' + total.toLocaleString('es-CO', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
+    }
+  }
   function bindEventsToRow(row) {
     var productSelect = row.querySelector('.product-select');
     var amountInput = row.querySelector('input[name="amount[]"]');
@@ -515,11 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return updatePrice(row);
     });
   }
-
-  // Inicializar los que ya están al cargar la página
   document.querySelectorAll('.product-item').forEach(bindEventsToRow);
-
-  // Evento para agregar una nueva fila de productos
   document.getElementById('add-item').addEventListener('click', function (e) {
     e.preventDefault();
     var productRow = document.querySelector('.product-item');
@@ -533,12 +541,12 @@ document.addEventListener('DOMContentLoaded', function () {
     deleteButton.addEventListener('click', function (e) {
       e.preventDefault();
       newProductRow.remove();
+      updateTotalPrice();
     });
     document.querySelector('.product-container').appendChild(newProductRow);
     bindEventsToRow(newProductRow);
+    updateTotalPrice();
   });
-
-  // Evento para eliminar un producto
   document.querySelectorAll('#delete_item').forEach(function (button) {
     if (button.closest('.product-item').isEqualNode(document.querySelector('.product-item'))) {
       button.setAttribute('disabled', 'true');
@@ -547,9 +555,11 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         var rowToDelete = button.closest('.product-item');
         rowToDelete.remove();
+        updateTotalPrice();
       });
     }
   });
+  updateTotalPrice();
 });
 
 /***/ }),

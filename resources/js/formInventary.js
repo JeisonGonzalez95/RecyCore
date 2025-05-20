@@ -1,33 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Función para verificar si un elemento está visible
     function isVisible(el) {
         return el && el.offsetParent !== null;
     }
 
-    // Función para actualizar el precio
     function updatePrice(row) {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
         const amountDevInput = row.querySelector('input[name="amountDev[]"]');
         const priceInput = row.querySelector('.price-hidden');
         const priceViewInput = row.querySelector('.price-visible');
-    
+
         const selectedOption = productSelect.options[productSelect.selectedIndex];
-        const unitPrice = parseFloat(selectedOption.getAttribute('data-price').replace(',', '.')) || 0;
-    
+        const unitPrice = parseFloat(selectedOption.getAttribute('data-price')?.replace(',', '.') || '0');
+
         const amount = parseFloat((amountInput.value || '0').replace(',', '.')) || 0;
         let amountDev = 0;
-    
+
         if (amountDevInput && isVisible(amountDevInput)) {
             amountDev = parseFloat((amountDevInput.value || '0').replace(',', '.')) || 0;
         }
-    
+
         const netAmount = Math.max(0, amount - amountDev);
         const total = unitPrice * netAmount;
-    
+
         priceInput.value = total;
-    
+
         if (priceViewInput) {
             const formatted = total.toLocaleString('es-CO', {
                 style: 'currency',
@@ -36,9 +34,26 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             priceViewInput.value = formatted;
         }
+
+        updateTotalPrice();
     }
 
-    // Función para asociar eventos a cada fila
+    function updateTotalPrice() {
+        let total = 0;
+        document.querySelectorAll('.price-hidden').forEach(input => {
+            const value = parseFloat(input.value?.replace(',', '.') || '0');
+            total += value;
+        });
+
+        const totalDisplay = document.getElementById('total-price');
+        if (totalDisplay) {
+            totalDisplay.textContent = 'Total: ' + total.toLocaleString('es-CO', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+    }
+
     function bindEventsToRow(row) {
         const productSelect = row.querySelector('.product-select');
         const amountInput = row.querySelector('input[name="amount[]"]');
@@ -59,10 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
         productSelect.addEventListener('change', () => updatePrice(row));
     }
 
-    // Inicializar los que ya están al cargar la página
     document.querySelectorAll('.product-item').forEach(bindEventsToRow);
 
-    // Evento para agregar una nueva fila de productos
     document.getElementById('add-item').addEventListener('click', function (e) {
         e.preventDefault();
 
@@ -77,13 +90,14 @@ document.addEventListener('DOMContentLoaded', function () {
         deleteButton.addEventListener('click', function (e) {
             e.preventDefault();
             newProductRow.remove();
+            updateTotalPrice();
         });
 
         document.querySelector('.product-container').appendChild(newProductRow);
         bindEventsToRow(newProductRow);
+        updateTotalPrice();
     });
 
-    // Evento para eliminar un producto
     document.querySelectorAll('#delete_item').forEach(button => {
         if (button.closest('.product-item').isEqualNode(document.querySelector('.product-item'))) {
             button.setAttribute('disabled', 'true');
@@ -92,8 +106,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 let rowToDelete = button.closest('.product-item');
                 rowToDelete.remove();
+                updateTotalPrice();
             });
         }
     });
 
+    updateTotalPrice();
 });
